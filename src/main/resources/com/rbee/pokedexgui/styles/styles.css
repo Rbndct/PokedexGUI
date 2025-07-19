@@ -1,0 +1,35 @@
+#pokedex-title {
+    -fx-fill: #e5275d;
+    -fx-letter-spacing: 40px;
+
+    /* Drop shadow for outer glow */
+    -fx-effect: dropshadow(gaussian, black, 10, 1, 2.5, 2.5);
+
+    /* Optional: add stroke with inner shadow */
+    -fx-stroke: black;             /* outline color */
+    -fx-stroke-width: 2px;
+}
+
+/* Master Ball-style mute button */
+#muteButton {
+    -fx-background-color: linear-gradient(to bottom, #e5275d, #181936); /* Pink to purple gradient */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-background-radius: 50;
+    -fx-min-width: 48px;
+    -fx-min-height: 48px;
+    -fx-max-width: 48px;
+    -fx-max-height: 48px;
+    -fx-border-radius: 50;
+    -fx-border-color: #001f2d;
+    -fx-border-width: 2;
+}
+
+.start-button {
+  -fx-font-family: 'VT323';
+  -fx-font-size: 20px;
+  -fx-text-fill: white;
+  -fx-background-color: linear-gradient(#e5275d, #181936);
+  -fx-background-radius: 100;
+}

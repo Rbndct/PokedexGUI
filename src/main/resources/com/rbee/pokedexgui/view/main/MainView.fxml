@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="540.0" prefWidth="960.0" stylesheets="@../../styles/styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rbee.pokedexgui.controller.main.MainViewController">
+
+    <!-- LEFT NAVIGATION (SIDE BAR) -->
+    <left>
+        <VBox fx:id="sidebarVBox" alignment="TOP_CENTER" prefWidth="220" spacing="20" styleClass="sidebar-pane">
+            <children>
+
+                <!-- Nav Button Template -->
+                <JFXButton fx:id="btnPokemon" graphicTextGap="12" styleClass="nav-card" text="Pokémon">
+                    <graphic>
+                        <AnchorPane pickOnBounds="false" prefHeight="32" prefWidth="30.0" style="-fx-padding: 0;">
+                            <children>
+                                <ImageView fitHeight="32" fitWidth="32" pickOnBounds="true" preserveRatio="true" styleClass="icon-3d-effect" translateX="-12" translateY="0">
+                                    <image>
+                                        <Image url="@../../images/pokemon-logo.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </AnchorPane>
+                    </graphic>
+                </JFXButton>
+
+                <JFXButton fx:id="btnMoves" graphicTextGap="12" styleClass="nav-card" text="Moves">
+                    <graphic>
+                        <AnchorPane prefHeight="32" prefWidth="30.0" style="-fx-padding: 0;">
+                            <children>
+                                <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 6, 0.3, 3, 3);" translateX="-12">
+                                    <image>
+                                        <Image url="@../../images/moves-logo.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </AnchorPane>
+                    </graphic>
+                </JFXButton>
+
+                <JFXButton fx:id="btnItems" graphicTextGap="12" styleClass="nav-card" text="Items">
+                    <graphic>
+                        <AnchorPane prefHeight="32" prefWidth="30.0" style="-fx-padding: 0;">
+                            <children>
+                                <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 6, 0.3, 3, 3);" translateX="-12">
+                                    <image>
+                                        <Image url="@../../images/item-logo.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </AnchorPane>
+                    </graphic>
+                </JFXButton>
+
+                <JFXButton fx:id="btnTrainer" graphicTextGap="12" styleClass="nav-card" text="Trainers">
+                    <graphic>
+                        <AnchorPane prefHeight="32" prefWidth="30.0" style="-fx-padding: 0;">
+                            <children>
+                                <ImageView fitHeight="28" fitWidth="28" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 6, 0.3, 3, 3);" translateX="-12">
+                                    <image>
+                                        <Image url="@../../images/trainer-logo.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </AnchorPane>
+                    </graphic>
+                </JFXButton>
+
+
+            </children>
+        </VBox>
+    </left>
+
+    <!-- CENTER AREA for dynamic content -->
+    <center>
+        <AnchorPane fx:id="contentArea" styleClass="content-pane" />
+    </center>
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="70" spacing="15" styleClass="top-bar">
+            <children>
+                <ImageView fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true" styleClass="logo-image">
+                    <image>
+                        <Image url="@../../images/pokedex-logo.png" />
+                    </image>
+                </ImageView>
+                <Label styleClass="header-title" text="My Pokédex" />
+            </children>
+        </HBox>
+    </top>
+
+</BorderPane>

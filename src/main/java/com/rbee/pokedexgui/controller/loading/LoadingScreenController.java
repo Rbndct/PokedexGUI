@@ -54,10 +54,15 @@ public class LoadingScreenController {
             "Tuning PokéFlute..."
     };
 
+    private static boolean soundPlayed = false;
+
+
     @FXML
     public void initialize() {
-        playSound("/com/rbee/pokedexgui/sounds/opening-theme.wav");
-
+        if (!soundPlayed) {
+            playSound("/com/rbee/pokedexgui/sounds/opening-theme.wav");
+            soundPlayed = true;
+        }
         Font.loadFont(getClass().getResourceAsStream("com/rbee/pokedexgui/fonts/PressStart2P-Regular.ttf"), 10);
 
         Font.loadFont(getClass().getResourceAsStream("/com/rbee/pokedexgui/fonts/VT323-Regular.ttf"), 10);
@@ -107,7 +112,6 @@ public class LoadingScreenController {
     }
 
 
-
     private void applyPokedexTitleEffects() {
         // 🌈 Gradient fill inside the text (yellow to orange)
         Stop[] stops = new Stop[] {
@@ -135,18 +139,52 @@ public class LoadingScreenController {
         innerShadow.setOffsetY(2);
         innerShadow.setChoke(0.6);
 
-        // Chain them: innerShadow inside outerGlow
+        // Chain effects
         innerShadow.setInput(outerGlow);
         pokedexTitle.setEffect(innerShadow);
 
-        // Stroke stays from CSS (black outline)
+        // 🎞 Slide-In + Bounce Animation
+        pokedexTitle.setTranslateY(80); // Start below
+        Timeline slideBounce = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(pokedexTitle.translateYProperty(), 80)),
+                new KeyFrame(Duration.seconds(0.6), new KeyValue(pokedexTitle.translateYProperty(), -20, Interpolator.EASE_OUT)),
+                new KeyFrame(Duration.seconds(0.9), new KeyValue(pokedexTitle.translateYProperty(), 0, Interpolator.EASE_BOTH))
+        );
+        slideBounce.setOnFinished(e -> startGlowPulse()); // Start pulse after bounce
+        slideBounce.play();
     }
+
+    private void startGlowPulse() {
+        // 🌟 Subtle glow pulse (scale + opacity)
+        ScaleTransition pulse = new ScaleTransition(Duration.seconds(2.5), pokedexTitle);
+        pulse.setFromX(1.0);
+        pulse.setFromY(1.0);
+        pulse.setToX(1.05);
+        pulse.setToY(1.05);
+        pulse.setAutoReverse(true);
+        pulse.setCycleCount(Animation.INDEFINITE);
+
+        FadeTransition fade = new FadeTransition(Duration.seconds(2.5), pokedexTitle);
+        fade.setFromValue(1.0);
+        fade.setToValue(0.93);
+        fade.setAutoReverse(true);
+        fade.setCycleCount(Animation.INDEFINITE);
+
+        pulse.play();
+        fade.play();
+    }
+
 
 
     private void playSound(String resourcePath) {
         try {
-            System.out.println("[DEBUG] LoadingController initialized!");
+            // Stop and close any existing clip
+            if (clip != null && clip.isRunning()) {
+                clip.stop();
+                clip.close();
+            }
 
+            System.out.println("[DEBUG] LoadingController initialized!");
             System.out.println("Trying to load audio from: " + resourcePath);
             InputStream audioSrc = getClass().getResourceAsStream(resourcePath);
             System.out.println("Audio stream is null? " + (audioSrc == null));
@@ -155,18 +193,29 @@ public class LoadingScreenController {
                 System.err.println("Audio file not found: " + resourcePath);
                 return;
             }
+
             InputStream bufferedIn = new java.io.BufferedInputStream(audioSrc);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
 
             clip = AudioSystem.getClip();
             clip.open(audioStream);
-            clip.start();
-            clip.loop(Clip.LOOP_CONTINUOUSLY);  // loop the sound
+
+            // Set volume to 50%
+            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+
+            // Convert 50% volume to decibels.
+            // Formula: gain = 20 * log10(volumePercentage)
+            float volume = 0.1f; // 50%
+            float dB = (float)(20.0 * Math.log10(volume));
+            volumeControl.setValue(dB); // sets volume
+
+            clip.loop(Clip.LOOP_CONTINUOUSLY);  // Starts and loops the clip
 
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
     }
+
 
     // Call this method to stop the sound (e.g., when leaving the loading screen)
     public void stopSound() {

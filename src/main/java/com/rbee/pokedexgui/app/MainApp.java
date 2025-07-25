@@ -1,4 +1,4 @@
-package com.rbee.pokedexgui;
+package com.rbee.pokedexgui.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,9 +25,6 @@ public class MainApp extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/rbee/pokedexgui/images/pokemon-logo.jpg"))));
 
         stage.show();
-
-        Font.getFamilies().forEach(System.out::println);
-
 
     }
     public static void main(String[] args) {

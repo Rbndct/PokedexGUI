@@ -1,0 +1,417 @@
+
+/* Enhanced Dashboard Styles with Fonts, Icons, and Animations */
+
+/* ===== FONT DECLARATIONS ===== */
+/* Import web fonts or use system fonts for JavaFX */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Custom font classes for different text hierarchy */
+.font-primary {
+    -fx-font-family: "Segoe UI Semibold", "Arial Bold", sans-serif;
+    -fx-font-weight: bold;
+}
+
+.font-secondary {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+}
+
+.font-accent {
+    -fx-font-family: "Segoe UI Symbol", "Arial Unicode MS", sans-serif;
+}
+
+/* ===== DASHBOARD HEADER ENHANCEMENTS ===== */
+/* Container for vertical spacing and centering */
+.dashboard-header {
+    -fx-padding: 0 0 12 0;
+    -fx-alignment: center;
+}
+
+.dashboard-header > Label {
+    -fx-padding: 0; /* no extra padding inside labels */
+}
+
+.dashboard-title {
+    -fx-font-family: "Segoe UI Semibold", "Arial Bold", sans-serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a689ff;
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.4), 6, 0.4, 0, 2);
+    -fx-padding: 0 0 2 0; /* small bottom padding for spacing */
+}
+
+.dashboard-subtitle {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-padding: 0; /* no padding */
+}
+
+
+
+/* ===== ENHANCED MODULE CARDS WITH ANIMATIONS ===== */
+.enhanced-module-grid {
+    -fx-padding: 10 0 0 0;
+}
+
+/* Base card style without background color - will be overridden by specific classes */
+.enhanced-module-card {
+    -fx-background-radius: 20;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-padding: 20;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0.3, 0, 5);
+    -fx-cursor: hand;
+    -fx-pref-width: 310;
+    -fx-pref-height: 140;
+    -fx-min-width: 310;
+    -fx-min-height: 140;
+    -fx-max-width: 310;
+    -fx-max-height: 140;
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+    -fx-opacity: 0.95;
+}
+
+/* Hover states override background with a slightly less transparent/darker shade */
+.enhanced-module-card:hover {
+    -fx-border-color: rgba(122, 94, 255, 0.7);
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.4), 20, 0.4, 0, 8);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-opacity: 1.0;
+    /* Slightly darker pastel hover background - example for pokemon-card */
+}
+
+/* Keep pressed and focused states as before or tweak opacity for subtlety */
+.enhanced-module-card:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+
+/* Pastel backgrounds with subtle transparency */
+.pokemon-card {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(152,251,152,0.85), rgba(144,238,144,0.75));
+    -fx-border-color: rgba(152, 251, 152, 0.6);
+}
+.moves-card {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(255,182,193,0.85), rgba(255,192,203,0.75));
+    -fx-border-color: rgba(255, 182, 193, 0.6);
+}
+
+.items-card {
+    -fx-background-color: linear-gradient(to bottom right,
+        #e6e6fa, /* lavender */
+        #d8bfd8); /* thistle */
+    -fx-border-color: #e6e6fa; /* Lavender */
+    -fx-border-width: 2px;
+    -fx-opacity: 0.95; /* Optional – controls whole node opacity */
+}
+
+.trainers-card {
+    -fx-background-color: linear-gradient(to bottom right,
+        rgba(255, 218, 185, 0.85), /* peach */
+        rgba(255, 228, 196, 0.75));
+    -fx-border-color: rgba(255, 218, 185, 0.6);
+}
+.pokemon-card:hover {
+    -fx-background-color: linear-gradient(to bottom right,
+        rgba(120, 220, 120, 0.9),
+        rgba(110, 210, 110, 0.8));
+    -fx-border-color: rgba(152, 251, 152, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(152, 251, 152, 0.4), 20, 0.4, 0, 8);
+}
+
+.moves-card:hover {
+    -fx-background-color: linear-gradient(to bottom right,
+        rgba(255, 160, 170, 0.9),
+        rgba(255, 170, 180, 0.8));
+    -fx-border-color: rgba(255, 182, 193, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(255, 182, 193, 0.4), 20, 0.4, 0, 8);
+}
+
+.items-card:hover {
+    -fx-background-color: linear-gradient(to bottom right,
+        rgba(200, 200, 240, 0.9),
+        rgba(190, 180, 220, 0.8));
+    -fx-border-color: rgba(230, 230, 250, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(230, 230, 250, 0.4), 20, 0.4, 0, 8);
+}
+
+.trainers-card:hover {
+    -fx-background-color: linear-gradient(to bottom right,
+        rgba(255, 200, 170, 0.9),
+        rgba(255, 210, 190, 0.8));
+    -fx-border-color: rgba(255, 218, 185, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(255, 218, 185, 0.4), 20, 0.4, 0, 8);
+}
+
+/* ===== CARD COMPONENTS WITH IMPROVED TYPOGRAPHY ===== */
+.card-header {
+    -fx-padding: 0 0 5 0;
+}
+
+.module-card-title {
+    -fx-font-family: "Segoe UI Semibold", "Arial Bold", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-letter-spacing: 1px;
+}
+
+.module-card-count {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+/* ===== MODULE ICONS WITH IMAGE SUPPORT ===== */
+.module-icon {
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-max-width: 40;
+    -fx-max-height: 40;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0.3, 0, 2);
+    /* Add subtle pulse animation on hover */
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+}
+
+.module-icon:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.4), 8, 0.4, 0, 2);
+}
+
+/* Icon backgrounds - these will be behind the images */
+.pokemon-icon {
+    -fx-background-color: linear-gradient(to bottom right, #e5275d, #ff6b9d);
+}
+
+
+.moves-icon {
+    -fx-background-color: linear-gradient(to bottom right, #7a5eff, #a689ff);
+}
+
+
+.items-icon {
+    -fx-background-color: linear-gradient(to bottom right, #ffc107, #ff9800);
+}
+
+.trainers-icon {
+    -fx-background-color: linear-gradient(to bottom right, #4caf50, #8bc34a);
+}
+
+/* ===== IMAGE STYLING FOR MODULE ICONS ===== */
+.module-icon ImageView {
+    -fx-fit-width: 28;
+    -fx-fit-height: 28;
+    -fx-preserve-ratio: true;
+    -fx-smooth: true;
+}
+
+.module-icon ImageView:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.3), 4, 0.3, 0, 0);
+}
+
+/* ===== TYPE TAGS AND CATEGORY ELEMENTS ===== */
+.preview-label {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-letter-spacing: 0.3px;
+}
+
+.type-tags-container {
+    -fx-padding: 2 0 0 0;
+}
+
+.type-tag {
+    -fx-background-color: rgba(122, 94, 255, 0.3);
+    -fx-background-radius: 12;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 8 3 8;
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.2), 2, 0.3, 0, 1);
+}
+
+.type-tag:hover {
+    -fx-background-color: rgba(122, 94, 255, 0.5);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* ===== TM/HM STATS SECTION ===== */
+.tm-hm-stats {
+    -fx-padding: 5 0 0 0;
+}
+
+.tm-count, .hm-count {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a689ff;
+}
+
+.tm-label, .hm-label {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 9px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-letter-spacing: 0.2px;
+}
+
+/* ===== CATEGORY INDICATORS ===== */
+.item-categories-grid {
+    -fx-padding: 5 0 0 0;
+    -fx-vgap: 6;
+    -fx-hgap: 8;
+}
+
+.category-count {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 10px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.category-dot {
+    -fx-min-width: 8;
+    -fx-min-height: 8;
+    -fx-max-width: 8;
+    -fx-max-height: 8;
+    -fx-background-radius: 4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 2, 0.3, 0, 1);
+}
+
+.vitamin-dot { -fx-background-color: #4caf50; }
+.feather-dot { -fx-background-color: #2196f3; }
+.leveling-dot { -fx-background-color: #ff9800; }
+.evolution-dot { -fx-background-color: #9c27b0; }
+
+/* Hover effects for category items */
+.category-count:hover {
+    -fx-text-fill: white;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* ===== RECENT ACTIVITY SECTION ===== */
+.recent-activity {
+    -fx-padding: 5 0 0 0;
+}
+
+.recent-list {
+    -fx-max-height: 60;
+    -fx-spacing: 2;
+}
+
+.recent-item {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 10px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-padding: 2 0 2 0;
+}
+
+.recent-item.placeholder {
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-font-style: italic;
+}
+
+.recent-item:hover {
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* ===== ENHANCED QUICK ACCESS BAR ===== */
+.quick-access-bar {
+    -fx-background-color: rgba(122, 94, 255, 0.08);
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(122, 94, 255, 0.2);
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-padding: 12 20 12 20;
+    -fx-margin: 10 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.1), 6, 0.2, 0, 2);
+}
+
+.quick-access-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(166, 137, 255, 0.8);
+    -fx-font-family: "Segoe UI Semibold", "Arial Bold", sans-serif;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-letter-spacing: 0.3px;
+    /* Initial state for animations */
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+}
+
+.quick-access-btn:hover {
+    -fx-background-color: rgba(122, 94, 255, 0.2);
+    -fx-text-fill: #a689ff;
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.3), 6, 0.3, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.quick-access-btn:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-background-color: rgba(122, 94, 255, 0.3);
+}
+
+.quick-divider {
+    -fx-min-width: 1;
+    -fx-max-width: 1;
+    -fx-min-height: 20;
+    -fx-background-color: rgba(166, 137, 255, 0.2);
+}
+
+/* ===== FOCUS STATES FOR ACCESSIBILITY ===== */
+.enhanced-module-card:focused {
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.6), 15, 0.5, 0, 0);
+}
+
+.quick-access-btn:focused {
+    -fx-background-color: rgba(122, 94, 255, 0.25);
+    -fx-border-color: rgba(122, 94, 255, 0.6);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.4), 8, 0.4, 0, 0);
+}
+
+
+/* ===== ANIMATION KEYFRAMES SIMULATION ===== */
+/* Since JavaFX doesn't support @keyframes, we use hover states and transitions */
+/* For more complex animations, use JavaFX Timeline and Transition classes in Java code */
+
+/* Subtle glow effect for interactive elements */
+.glow-effect {
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.4), 10, 0.3, 0, 0);
+}
+
+.glow-effect:hover {
+    -fx-effect: dropshadow(gaussian, rgba(122, 94, 255, 0.6), 15, 0.4, 0, 0);
+}
+
+/* Pulsing effect for important elements */
+.pulse-effect {
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+}
+
+.pulse-effect:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}

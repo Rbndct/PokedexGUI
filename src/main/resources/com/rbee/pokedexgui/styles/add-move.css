@@ -1,0 +1,270 @@
+.add-move-button {
+  -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #00b248, #00712a);
+  -fx-background-radius: 10;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 18px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 120, 40, 0.7), 6, 0, 0, 3);
+  -fx-padding: 10 20 10 20;
+  -fx-cursor: hand;
+  -fx-border-color: #005515;
+  -fx-border-radius: 10;
+  -fx-border-width: 1.5;
+  -fx-alignment: center;
+  -fx-content-display: left; /* for icon + text if icon added */
+}
+
+.add-move-button:hover {
+  -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #00d259, #008633);
+  -fx-effect: dropshadow(gaussian, rgba(0, 150, 50, 0.9), 10, 0, 0, 5);
+  -fx-scale-x: 1.05;
+  -fx-scale-y: 1.05;
+  -fx-border-color: #00ff70;
+}
+
+.add-move-button:pressed {
+  -fx-scale-x: 0.95;
+  -fx-scale-y: 0.95;
+  -fx-effect: dropshadow(gaussian, rgba(0, 80, 25, 0.9), 4, 0, 0, 2);
+}
+
+/* Base style for all TitledPanes */
+.titled-pane {
+    -fx-background-color: #1a202c; /* dark navy base */
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 10 15 15 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 10, 0.3, 0, 0);
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+
+    /* Clear default borders/backgrounds to avoid white edges */
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+/* Title bar styling */
+.titled-pane > .title {
+    -fx-background-color: #2e3748; /* darker blue-gray for header */
+    -fx-background-radius: 12 12 0 0;
+    -fx-border-radius: 12 12 0 0;
+    -fx-padding: 8 15 8 15;
+    -fx-font-size: 16px;
+    -fx-text-fill: #cbd5e1; /* light bluish gray text */
+    -fx-effect: dropshadow(gaussian, rgba(46,55,72,0.6), 5, 0.3, 0, 1);
+    -fx-cursor: hand;
+
+    /* Remove border or white outline */
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+/* Hover effect on title bar */
+.titled-pane > .title:hover {
+    -fx-background-color: #3a4558;
+    -fx-text-fill: #e0e7ff;
+    -fx-effect: dropshadow(gaussian, rgba(66,165,245,0.7), 10, 0.5, 0, 0);
+}
+
+/* Expanded content area */
+.titled-pane > .content {
+    -fx-background-color: #1a202c;
+    -fx-border-radius: 0 0 12 12;
+    -fx-background-radius: 0 0 12 12;
+    -fx-padding: 15;
+
+    /* Remove border to prevent white lines */
+    fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.titled-pane-content-vbox {
+    -fx-background-color: #0f1418;
+    -fx-padding: 15;
+    -fx-background-radius: 0 0 0 0; /* match TitledPane bottom radius */
+    -fx-border-radius: 0 0 0 0;
+    -fx-border-color: transparent;
+}
+
+.clear-button {
+  -fx-background-color: linear-gradient(to bottom, #a83232, #6e1f1f);
+  -fx-background-radius: 10;
+  -fx-text-fill: #ff6666;
+  -fx-font-weight: bold;
+  -fx-font-size: 18px;
+  -fx-effect: dropshadow(gaussian, rgba(170, 50, 50, 0.7), 5, 0, 0, 2);
+  -fx-padding: 10 20 10 20;
+  -fx-cursor: hand;
+  -fx-border-color: #801010;
+  -fx-border-radius: 10;
+  -fx-border-width: 1.5;
+}
+
+.clear-button:hover {
+  -fx-background-color: linear-gradient(to bottom, #d54444, #9f2727);
+  -fx-effect: dropshadow(gaussian, rgba(255, 70, 70, 0.9), 8, 0, 0, 3);
+  -fx-scale-x: 1.05;
+  -fx-scale-y: 1.05;
+}
+
+.clear-button:pressed {
+  -fx-scale-x: 0.95;
+  -fx-scale-y: 0.95;
+  -fx-effect: dropshadow(gaussian, rgba(130, 0, 0, 0.8), 4, 0, 0, 1);
+}
+/* ===== Spinner (including JFXSpinner) ===== */
+.spinner-style {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 2 6 2 6;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    -fx-effect: dropshadow(gaussian, #c37eff, 4, 0.3, 0, 0);
+}
+
+
+/* ===== JFXCheckBox ===== */
+.jfx-check-box {
+    -fx-text-fill: #ddd;
+    -fx-font-size: 16px;
+    -fx-padding: 5 10 5 5;
+}
+
+.jfx-check-box > .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #bbb;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-border-width: 1.5;
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+}
+
+.jfx-check-box:selected > .box {
+    -fx-background-color: #c37eff;
+    -fx-border-color: #b072e8;
+    -fx-effect: dropshadow(gaussian, #b072e8, 8, 0.4, 0, 0);
+}
+
+/* Hover effect */
+.jfx-check-box:hover > .box {
+    -fx-border-color: #dba1ff;
+}
+
+/* ===== JFXComboBox ===== */
+.jfx-combo-box {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 0 8 0 8;
+    -fx-pref-height: 30px;
+    -fx-display-caret: false;
+}
+
+.jfx-combo-box .list-cell {
+    -fx-background-color: rgba(44, 49, 61, 1);
+    -fx-text-fill: white; /* Dark clean text color */
+    -fx-padding: 6 12;
+    -fx-pref-height: 30px;
+}
+
+/* Hovered option in dropdown */
+.jfx-combo-box .list-cell:hover {
+    -fx-background-color: #c37eff;
+    -fx-text-fill: white;
+}
+
+/* Fix for the popup dropdown area */
+.jfx-combo-box-popup .list-view {
+    -fx-background-color: rgba(20, 20, 20, 0.95);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1;
+    -fx-padding: 5;
+    -fx-pref-width: 250px;
+}
+
+
+/* Optional: fix scrollbar if it shows */
+.jfx-combo-box-popup .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.jfx-combo-box .arrow {
+    -fx-background-color: white;
+}
+
+.jfx-combo-box > .text {
+    -fx-fill: white; /* Sometimes needed for text color */
+}
+
+.jfx-combo-box .label {
+    -fx-text-fill: white; /* For the displayed selected item text */
+}
+
+/* ===== TextField ===== */
+.text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 4 8 4 8;
+}
+
+.text-field:focused {
+    -fx-border-color: #c37eff;
+    -fx-background-color: rgba(195, 126, 255, 0.15);
+    -fx-effect: dropshadow(gaussian, #c37eff, 8, 0.2, 0, 0);
+}
+
+.modern-scrollpane {
+    -fx-background-color: #0f1418; /* dark background */
+    -fx-background-insets: 0;
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-width: 1;
+    -fx-border-radius: 0 0 15 15; /* no top rounding, rounded bottom corners */
+    -fx-background-radius: 0 0 15 15;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 0, 3);
+}
+
+
+ /* Optional scrollbar styling to match theme */
+ .modern-scrollpane .scroll-bar:vertical .track,
+ .modern-scrollpane .scroll-bar:horizontal .track {
+     -fx-background-color: rgba(70, 75, 90, 0.6);
+     -fx-background-radius: 10;
+ }
+
+ .modern-scrollpane .scroll-bar:vertical .thumb,
+ .modern-scrollpane .scroll-bar:horizontal .thumb {
+     -fx-background-color: #42A5F5; /* tab highlight blue */
+     -fx-background-insets: 2;
+     -fx-background-radius: 10;
+ }
+
+ .modern-scrollpane .scroll-bar:vertical:hover .thumb,
+ .modern-scrollpane .scroll-bar:horizontal:hover .thumb {
+     -fx-background-color: #64B5F6; /* lighter blue on hover */
+ }

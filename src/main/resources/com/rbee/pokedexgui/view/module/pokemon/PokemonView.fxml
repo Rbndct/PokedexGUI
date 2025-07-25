@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="pokemonManagementRoot" maxHeight="511.0" maxWidth="720.0" minHeight="470.0" minWidth="720.0" prefHeight="511.0" prefWidth="720.0" styleClass="pokemon-management-container" stylesheets="@../../../styles/pokemon-dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rbee.pokedexgui.controller.pokemon.PokemonViewController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="70.0" prefWidth="720.0">
+         <children>
+
+             <!-- Nav Bar -->
+             <HBox fx:id="headerContainer" prefHeight="70.0" prefWidth="736.0" styleClass="header-container">
+<!--                 <padding>-->
+<!--                     <Insets bottom="5.0" top="5.0" />-->
+<!--                 </padding>-->
+
+                 <children>
+                     <!-- Titles -->
+                     <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="327.0">
+                         <children>
+                             <Text fx:id="moduleTitle" fill="WHITE" styleClass="module-title" text="Pokémon Management" wrappingWidth="244.6513671875">
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin></Text>
+                             <Text fx:id="moduleSubtitle" fill="WHITE" styleClass="module-subtitle" text="Manage your Pokédex entries">
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin></Text>
+                         </children>
+                     <opaqueInsets>
+                        <Insets left="10.0" />
+                     </opaqueInsets>
+                     </VBox>
+
+                     <Region prefHeight="70.0" prefWidth="15.0" />
+
+                     <!-- Tab Buttons -->
+                     <HBox fx:id="tabButtonContainer" alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="378.0" styleClass="tab-container">
+                         <children>
+                             <JFXButton fx:id="dashboardTab" prefHeight="27.0" prefWidth="140.0" text="Dashboard" textFill="WHITE">
+                           <styleClass>
+                              <String fx:value="active-tab" />
+                              <String fx:value="tab-button" />
+                           </styleClass></JFXButton>
+                             <JFXButton fx:id="addPokemonTab" prefHeight="27.0" prefWidth="140.0" styleClass="tab-button" text="Add " textFill="WHITE" />
+                             <JFXButton fx:id="viewAllTab" prefHeight="27.0" prefWidth="140.0" styleClass="tab-button" text="View" textFill="WHITE" />
+                         </children>
+                     </HBox>
+                 </children>
+               <opaqueInsets>
+                  <Insets left="5.0" />
+               </opaqueInsets>
+             </HBox>
+
+
+         </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </VBox>
+
+      <StackPane fx:id="contentStackPane" layoutY="83.0" prefHeight="429.0" prefWidth="720.0" stylesheets="@../../../styles/add-pokemon.css">
+         <children>
+
+             <!-- Pokemon Dashboard View -->
+            <Pane fx:id="dashboardContentPane" prefHeight="420.0" prefWidth="720.0" styleClass="modern-pane" visible="false">
+               <children>
+
+                   <!-- Top Row Stats -->
+                   <HBox alignment="CENTER" layoutY="20.0" prefHeight="100.0" prefWidth="720.0">
+                     <children>
+                         <!-- Total Pokémon Section Container -->
+                         <VBox alignment="CENTER" maxHeight="100.0" minHeight="100.0" prefHeight="100.0" prefWidth="180.0" spacing="8.0" styleClass="total-pokemon-container">
+                             <children>
+                                 <!-- Inner fill pane -->
+                                 <VBox alignment="CENTER" prefHeight="80.0" prefWidth="160.0" spacing="8.0" styleClass="total-pokemon-inner">
+                                     <children>
+                                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stat-total-pokemon" text="0" textAlignment="CENTER" />
+                                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label-total-pokemon" text="Total Pokémon" textAlignment="CENTER" />
+                                     </children>
+                                 </VBox>
+                             </children>
+                             <HBox.margin>
+                                 <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                             </HBox.margin>
+                         </VBox>
+
+
+                         <!-- Top Type Section Container -->
+                         <VBox alignment="CENTER" maxHeight="100.0" minHeight="100.0" prefHeight="100.0" prefWidth="180.0" spacing="3.0" styleClass="top-type-container">
+                             <children>
+                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stat-top-type" text="Water (x22)" textAlignment="CENTER" wrappingWidth="74.333984375" />
+                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label-top-type" text="Top Type" textAlignment="CENTER" />
+                             </children>
+                             <HBox.margin>
+                                 <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                             </HBox.margin>
+                         </VBox>
+
+                         <!-- Highest Base Stat Section Container -->
+                         <VBox alignment="CENTER" maxHeight="100.0" minHeight="100.0" prefHeight="100.0" prefWidth="180.0" spacing="8.0" styleClass="highest-base-container">
+                             <children>
+                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stat-highest-base" text="680 (Dragonite)" textAlignment="CENTER" />
+                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label-highest-base" text="Highest Base Stat" textAlignment="CENTER" />
+                             </children>
+                             <HBox.margin>
+                                 <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                             </HBox.margin>
+                         </VBox>
+
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+
+                   <!-- Bottom Row Panels -->
+                   <HBox alignment="CENTER" layoutY="140.0" prefHeight="259.0" prefWidth="720.0">
+                     <children>
+
+                         <!-- Type Distribution Panel Container -->
+                         <VBox alignment="CENTER" prefHeight="229.0" prefWidth="354.0" spacing="10.0" styleClass="type-distribution-container">
+                             <children>
+                                 <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="panel-type-distribution">
+                                     <VBox.margin>
+                                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                     </VBox.margin>
+                                 </AnchorPane>
+                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label-type-distribution" text="Type Distribution" textAlignment="CENTER" wrappingWidth="240">
+                                 <VBox.margin>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </VBox.margin></Text>
+                             </children>
+                             <HBox.margin>
+                                 <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                             </HBox.margin>
+                         </VBox>
+
+
+                         <!-- Recent Additions Panel Container -->
+                         <VBox alignment="TOP_RIGHT" prefHeight="229.0" prefWidth="378.0" spacing="5.0" styleClass="recent-additions-container">
+                             <children>
+                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="label-recent-additions" text="Recent Additions" textAlignment="JUSTIFY" wrappingWidth="250.0">
+                                 <VBox.margin>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </VBox.margin></Text>
+                                 <ListView prefHeight="181.0" prefWidth="360.0" styleClass="list-recent-additions">
+                                 <VBox.margin>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </VBox.margin></ListView>
+                             </children>
+                             <VBox.margin>
+                                 <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+                             </VBox.margin>
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="10.0" right="15.0" top="5.0" />
+                           </HBox.margin>
+                         </VBox>
+
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </Pane>
+            <ScrollPane fx:id="addPokemonContentPane" hbarPolicy="NEVER" prefHeight="567.0" prefWidth="710.0" styleClass="modern-scrollpane" visible="false">
+               <content>
+                  <VBox prefHeight="482.0" prefWidth="676.0" spacing="15.0" styleClass="titled-pane-content-vbox">
+                     <children>
+                        <TitledPane expanded="false" prefHeight="50.0" prefWidth="200.0" text="Pokemon Identity">
+                           <content>
+                              <VBox prefHeight="141.0" prefWidth="698.0">
+                                 <children>
+                                    <GridPane alignment="CENTER" hgap="10.0" prefHeight="75.0" prefWidth="678.0" VBox.vgrow="ALWAYS">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="50.0" vgrow="ALWAYS" />
+                                        <RowConstraints minHeight="50.0" vgrow="ALWAYS" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Spinner fx:id="pokemonNumberSpinner" editable="true" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="200.0" styleClass="spinner-style" GridPane.columnIndex="1">
+                                             <tooltip>
+                                                <Tooltip text="Enter the Pokémon number (1 to 1010). Must be unique." />
+                                             </tooltip></Spinner>
+                                          <TextField fx:id="pokemonNameField" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="250.0" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <tooltip>
+                                                <Tooltip text="Enter the Pokémon name. Only letters, spaces, dashes, apostrophes, parentheses allowed." />
+                                             </tooltip></TextField>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Pokemon No.">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Pokemon Name" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </GridPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                        <TitledPane prefHeight="50.0" prefWidth="200.0" text="Pokemon Typing">
+                           <content>
+                              <VBox prefHeight="141.0" prefWidth="698.0">
+                                 <children>
+                                    <GridPane alignment="CENTER" hgap="10.0" prefHeight="75.0" prefWidth="678.0" VBox.vgrow="ALWAYS">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="50.0" vgrow="ALWAYS" />
+                                          <RowConstraints minHeight="50.0" vgrow="ALWAYS" />
+                                       </rowConstraints>
+                                       <children>
+                                          <JFXComboBox fx:id="primaryTypeComboBox" minHeight="30.0" minWidth="250.0" styleClass="jfx-combo-box" GridPane.columnIndex="1" />
+                                          <JFXComboBox fx:id="secondaryTypeComboBox" minHeight="30.0" minWidth="250.0" styleClass="jfx-combo-box" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <JFXCheckBox fx:id="hasSecondaryTypeCheckBox" styleClass="jfx-check-box" text="Has a Secondary Type?" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Primary Type">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </GridPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                        <TitledPane expanded="false" prefHeight="50.0" prefWidth="200.0" text="Evolution Info">
+                           <content>
+                              <VBox prefHeight="141.0" prefWidth="698.0">
+                                 <children>
+                                    <GridPane alignment="CENTER" hgap="10.0" prefHeight="75.0" prefWidth="678.0" VBox.vgrow="ALWAYS">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="50.0" vgrow="ALWAYS" />
+                                          <RowConstraints minHeight="50.0" vgrow="ALWAYS" />
+                                          <RowConstraints minHeight="50.0" prefHeight="30.0" vgrow="ALWAYS" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Spinner fx:id="evolvesFromSpinner" editable="true" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="200.0" styleClass="spinner-style" GridPane.columnIndex="1" />
+                                          <JFXCheckBox fx:id="hasEvolvesFromCheckBox" styleClass="jfx-check-box" text="Has Evolves From?">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="hasEvolvesToCheckBox" styleClass="jfx-check-box" text="Has Evolves To?" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <Spinner fx:id="evolutionLevelSpinner" editable="true" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="200.0" styleClass="spinner-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Evolution Level" GridPane.rowIndex="2">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                          <Spinner fx:id="evolvesToSpinner" editable="true" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="200.0" styleClass="spinner-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </GridPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                         <TitledPane expanded="false" prefHeight="50.0" prefWidth="200.0" text="Base Stats">
+                             <content>
+                                 <VBox alignment="CENTER" prefWidth="680" spacing="12">
+                                     <padding>
+                                         <Insets bottom="15" left="15" right="15" top="15" />
+                                     </padding>
+                                 <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the Pokémon's base stats below (1–255)" textAlignment="CENTER">
+                                    <font>
+                                       <Font size="15.0" />
+                                    </font>
+                                 </Text>
+
+                                     <!-- Two-Column Stats Grid -->
+                                     <GridPane hgap="30.0" vgap="30.0">
+                                         <columnConstraints>
+                                             <ColumnConstraints halignment="RIGHT" prefWidth="100" />
+                                             <ColumnConstraints halignment="LEFT" prefWidth="150" />
+                                             <ColumnConstraints halignment="RIGHT" prefWidth="100" />
+                                             <ColumnConstraints halignment="LEFT" prefWidth="150" />
+                                         </columnConstraints>
+
+                                         <!-- Left Column (HP, Attack, Defense) -->
+                                         <Text fill="WHITE" text="HP:" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font></Text>
+                                         <Spinner fx:id="spinnerHP" editable="true" initialValue="50" max="255" min="1" prefHeight="30.0" prefWidth="140" styleClass="spinner-style" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                         <Text fill="WHITE" text="Attack:" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font></Text>
+                                         <Spinner fx:id="spinnerAttack" editable="true" initialValue="50" max="255" min="1" prefHeight="30.0" prefWidth="140" styleClass="spinner-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                         <Text fill="WHITE" text="Defense:" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font></Text>
+                                         <Spinner fx:id="spinnerDefense" editable="true" initialValue="50" max="255" min="1" prefHeight="30.0" prefWidth="140" styleClass="spinner-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                         <!-- Right Column (Sp. Atk, Sp. Def, Speed) -->
+                                         <Text fill="WHITE" text="Sp. Atk:" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font></Text>
+                                         <Spinner fx:id="spinnerSpecialAttack" editable="true" initialValue="50" max="255" min="1" prefHeight="30.0" prefWidth="140" styleClass="spinner-style" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                         <Text fill="WHITE" text="Sp. Def:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font></Text>
+                                         <Spinner fx:id="spinnerSpecialDefense" editable="true" initialValue="50" max="255" min="1" prefHeight="30.0" prefWidth="140" styleClass="spinner-style" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                                         <Text fill="WHITE" text="Speed:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font></Text>
+                                         <Spinner fx:id="spinnerSpeed" editable="true" initialValue="50" max="255" min="1" prefHeight="30.0" prefWidth="140" styleClass="spinner-style" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <rowConstraints>
+                                       <RowConstraints />
+                                       <RowConstraints />
+                                       <RowConstraints />
+                                    </rowConstraints>
+                                     </GridPane>
+                                 </VBox>
+                             </content>
+                         </TitledPane>
+                         <HBox alignment="CENTER_RIGHT" prefHeight="91.0" prefWidth="646.0" spacing="20" style="-fx-padding: 20;" VBox.vgrow="NEVER">
+                             <JFXButton fx:id="clearButton" buttonType="RAISED" styleClass="clear-button" text="Clear" />
+                             <JFXButton fx:id="addButton" buttonType="RAISED" onAction="#handleAddPokemon" styleClass="add-pokemon-button" text="Add Pokémon" />
+                         </HBox>
+
+
+
+
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+            <VBox fx:id="viewPokemonTab" prefHeight="420.0" prefWidth="720.0" styleClass="search-pane" stylesheets="@../../../styles/view-pokemon.css">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="31.0" prefWidth="710.0" styleClass="header-box">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="search-pane-header" text="Your Pokémon Pokédex" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="search-pane-header" text="List of every Pokémon in the data base, along with their main stats. ">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+                   <HBox alignment="CENTER" prefHeight="60.0" spacing="15.0" style="-fx-padding: 10;" styleClass="header-box">
+                       <children>
+
+                           <!-- Pokémon Logo -->
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                               <image>
+                                   <Image url="@../../../images/pokemon-logo.jpg" />
+                               </image>
+                           </ImageView>
+
+                           <!-- Name/ID Search Field -->
+                           <TextField fx:id="searchTextField" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" promptText="Search by Name or ID" styleClass="text-field">
+                               <font>
+                                   <Font name="System" size="16.0" />
+                               </font>
+                           </TextField>
+
+                           <!-- Type Filter ComboBox -->
+                           <JFXComboBox fx:id="typeFilterBox" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="150.0" promptText="Filter by type" styleClass="jfx-combo-box" />
+
+                           <!-- Reset Filters Button -->
+                           <JFXButton fx:id="resetFiltersButton" prefHeight="30.0" prefWidth="80.0" styleClass="tab-button" text="Reset">
+                               <font>
+                                   <Font size="14.0" />
+                               </font>
+                           </JFXButton>
+
+                       </children>
+                   </HBox>
+
+                   <StackPane>
+                     <children>
+                         <TableView fx:id="pokemonTableView" prefHeight="420" prefWidth="720" styleClass="pokemon-table">
+                             <columns>
+                                 <!-- Pokédex Number -->
+                                 <TableColumn fx:id="idColumn" prefWidth="130" style="-fx-alignment: CENTER;" text="#" />
+
+                                       <!-- Name -->
+                                 <TableColumn fx:id="nameColumn" prefWidth="130" text="Name" />
+
+                                       <!-- Types -->
+                                 <TableColumn fx:id="typeColumn" prefWidth="130" text="Type(s)" />
+
+
+                                 <!-- Base Stats -->
+                                 <TableColumn fx:id="hpColumn" prefWidth="60" style="-fx-alignment: CENTER;" text="HP" />
+                                 <TableColumn fx:id="atkColumn" prefWidth="60" style="-fx-alignment: CENTER;" text="Atk" />
+                                 <TableColumn fx:id="defColumn" prefWidth="60" style="-fx-alignment: CENTER;" text="Def" />
+                                 <TableColumn fx:id="spaColumn" prefWidth="60" style="-fx-alignment: CENTER;" text="Sp.Atk" />
+                                 <TableColumn fx:id="spdColumn" prefWidth="60" style="-fx-alignment: CENTER;" text="Sp.Def" />
+                                 <TableColumn fx:id="speColumn" prefWidth="60" style="-fx-alignment: CENTER;" text="Spe" />
+
+                                       <!-- Total -->
+                                 <TableColumn fx:id="totalColumn" prefWidth="70" style="-fx-alignment: CENTER;" text="Total" />
+                             </columns>
+                         </TableView>
+                     </children>
+                  </StackPane>
+               </children>
+            </VBox>
+
+
+         </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </StackPane>
+   </children>
+   <padding>
+      <Insets right="10.0" />
+   </padding>
+</AnchorPane>

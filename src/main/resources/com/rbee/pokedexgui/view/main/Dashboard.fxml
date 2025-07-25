@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="25" styleClass="dashboard-container" stylesheets="@../../styles/dashboard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rbee.pokedexgui.controller.main.DashboardController">
+    <children>
+
+        <!-- Enhanced Welcome Section -->
+        <VBox alignment="CENTER" prefWidth="655" spacing="4" styleClass="dashboard-header">
+            <Label styleClass="dashboard-title" text="Welcome to your Enhanced Pokédex" wrapText="true" />
+            <Label styleClass="dashboard-subtitle" text="Select a module to get started" />
+        </VBox>
+
+
+        <!-- Enhanced Module Cards Grid with Fixed Sizes -->
+        <GridPane alignment="CENTER" hgap="25" prefHeight="262.0" prefWidth="655.0" styleClass="enhanced-module-grid">
+            <columnConstraints>
+                <ColumnConstraints maxWidth="320.0" minWidth="310.0" prefWidth="320.0" />
+            <ColumnConstraints fillWidth="false" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="200.0" minHeight="200.0" prefHeight="200.0" />
+            <RowConstraints />
+            </rowConstraints>
+            <children>
+
+                <!-- Pokemon Module Card -->
+                <JFXButton fx:id="pokemonCard" maxHeight="180" maxWidth="320" minHeight="180" minWidth="320" prefHeight="180" prefWidth="320" styleClass="enhanced-module-card, pokemon-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <graphic>
+                        <VBox prefHeight="127.0" prefWidth="280" spacing="15">
+                            <children>
+                                <!-- Card Header -->
+                                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="card-header">
+                                    <children>
+                                        <StackPane styleClass="module-icon, pokemon-icon">
+                                            <children>
+                                                <ImageView fitHeight="28" fitWidth="28" preserveRatio="true" smooth="true">
+                                                    <image>
+                                                        <Image url="@../../images/pokemon-logo.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label styleClass="module-card-title" text="POKÉMON" />
+                                                <Label styleClass="module-card-count" text="0 Registered" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <!-- Popular Types Section -->
+                                <VBox spacing="4" styleClass="pokemon-types-preview">
+                                    <children>
+                                        <Label styleClass="preview-label" text="Popular Types:" />
+                                        <HBox spacing="4" styleClass="type-tags-container">
+                                            <children>
+                                                <Label styleClass="type-tag" text="Fire" />
+                                                <Label styleClass="type-tag" text="Water" />
+                                                <Label styleClass="type-tag" text="Electric" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </JFXButton>
+
+                <!-- Moves Module Card -->
+                <JFXButton fx:id="movesCard" maxHeight="180" maxWidth="320" minHeight="180" minWidth="320" prefHeight="180" prefWidth="320" styleClass="enhanced-module-card, moves-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <graphic>
+                        <VBox prefHeight="160" prefWidth="280" spacing="15">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="card-header">
+                                    <children>
+                                        <StackPane styleClass="module-icon, moves-icon">
+                                            <children>
+                                                <ImageView fitHeight="28" fitWidth="28" preserveRatio="true" smooth="true">
+                                                    <image>
+                                                        <Image url="@../../images/moves-logo.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label prefHeight="20.0" prefWidth="81.0" styleClass="module-card-title" text="MOVES" />
+                                                <Label styleClass="module-card-count" text="0 Learned" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+
+                                <HBox alignment="CENTER_LEFT" spacing="15" styleClass="tm-hm-stats">
+                                    <children>
+                                        <VBox alignment="CENTER" spacing="2">
+                                            <Label styleClass="tm-count" text="0 TMs" />
+                                            <Label styleClass="tm-label" text="Technical Machines" />
+                                        </VBox>
+                                        <VBox alignment="CENTER" spacing="2">
+                                            <Label styleClass="hm-count" text="0 HMs" />
+                                            <Label styleClass="hm-label" text="Hidden Machines" />
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </JFXButton>
+
+                <!-- Items Module Card -->
+                <JFXButton fx:id="itemsCard" maxHeight="302.0" maxWidth="320" minHeight="180" minWidth="320" prefHeight="180" prefWidth="320" styleClass="enhanced-module-card, items-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <graphic>
+                        <VBox prefHeight="160" prefWidth="280" spacing="15">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="card-header">
+                                    <children>
+                                        <StackPane styleClass="module-icon, items-icon">
+                                            <children>
+                                                <ImageView fitHeight="28" fitWidth="28" preserveRatio="true" smooth="true">
+                                                    <image>
+                                                        <Image url="@../../images/item-logo.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label styleClass="module-card-title" text="ITEMS" />
+                                                <Label styleClass="module-card-count" text="0 Items" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+
+                                <GridPane hgap="8" styleClass="item-categories-grid" vgap="4">
+                                    <columnConstraints>
+                                        <ColumnConstraints percentWidth="50" />
+                                        <ColumnConstraints percentWidth="50" />
+                                    </columnConstraints>
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                            <children>
+                                                <Region styleClass="category-dot, vitamin-dot" />
+                                                <Label styleClass="category-count" text="0 Vitamins" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                            <children>
+                                                <Region styleClass="category-dot, feather-dot" />
+                                                <Label styleClass="category-count" text="0 Feathers" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                            <children>
+                                                <Region styleClass="category-dot, leveling-dot" />
+                                                <Label styleClass="category-count" text="0 Leveling Items" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                            <children>
+                                                <Region styleClass="category-dot, evolution-dot" />
+                                                <Label styleClass="category-count" text="0 Evolution Stones" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
+                                </GridPane>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </JFXButton>
+
+                <!-- Trainers Module Card -->
+                <JFXButton fx:id="trainersCard" maxHeight="180" maxWidth="320" minHeight="180" minWidth="320" prefHeight="180" prefWidth="320" styleClass="enhanced-module-card, trainers-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <graphic>
+                        <VBox prefHeight="160" prefWidth="280" spacing="15">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="card-header">
+                                    <children>
+                                        <StackPane styleClass="module-icon, trainers-icon">
+                                            <children>
+                                                <ImageView fitHeight="28" fitWidth="28" preserveRatio="true" smooth="true">
+                                                    <image>
+                                                        <Image url="@../../images/trainer-logo.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </children>
+                                        </StackPane>
+                                        <VBox spacing="2">
+                                            <children>
+                                                <Label styleClass="module-card-title" text="TRAINERS" />
+                                                <Label styleClass="module-card-count" text="0 Registered" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+
+                                <VBox spacing="6" styleClass="recent-activity">
+                                    <children>
+                                        <Label styleClass="preview-label" text="Recent Activity:" />
+                                        <VBox spacing="3" styleClass="recent-list">
+                                            <children>
+                                                <Label styleClass="recent-item, placeholder" text="No recent activity" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </JFXButton>
+
+            </children>
+        </GridPane>
+
+        <!-- Quick Access Bar -->
+        <HBox alignment="CENTER" prefHeight="58.0" prefWidth="622.0" spacing="15" styleClass="quick-access-bar">
+            <children>
+                <Label styleClass="quick-access-btn" text="RANDOM POKÉMON" />
+                <Region styleClass="quick-divider" />
+                <Label styleClass="quick-access-btn" text="TIP / HELP" />
+                <Region styleClass="quick-divider" />
+                <Label styleClass="quick-access-btn" text="POKÉMON FACT" />
+            </children>
+        </HBox>
+
+    </children>
+</VBox>

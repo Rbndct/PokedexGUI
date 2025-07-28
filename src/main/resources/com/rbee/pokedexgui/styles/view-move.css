@@ -1,0 +1,333 @@
+.type-badge {
+    -fx-text-fill: white;
+    -fx-padding: 3 10 3 10;
+    -fx-background-radius: 15;
+    -fx-font-weight: bold;
+    -fx-font-size: 10px;
+    -fx-alignment: center;
+    -fx-min-height: 20px;
+    -fx-min-width: 70px;
+    -fx-pref-width: 70px;    /* fixed preferred width */
+    -fx-max-width: 70px;     /* prevent expanding beyond */
+    -fx-text-alignment: center;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.4) , 1,0,0,1);
+}
+
+
+/* PokémonDB-like colors */
+.type-normal { -fx-background-color: #A8A878; }
+.type-fire { -fx-background-color: #F08030; }
+.type-water { -fx-background-color: #6890F0; }
+.type-electric { -fx-background-color: #F8D030; }
+.type-grass { -fx-background-color: #78C850; }
+.type-ice { -fx-background-color: #98D8D8; }
+.type-fighting { -fx-background-color: #C03028; }
+.type-poison { -fx-background-color: #A040A0; }
+.type-ground { -fx-background-color: #E0C068; }
+.type-flying { -fx-background-color: #A890F0; }
+.type-psychic { -fx-background-color: #F85888; }
+.type-bug { -fx-background-color: #A8B820; }
+.type-rock { -fx-background-color: #B8A038; }
+.type-ghost { -fx-background-color: #705898; }
+.type-dragon { -fx-background-color: #7038F8; }
+.type-dark { -fx-background-color: #705848; }
+.type-steel { -fx-background-color: #B8B8D0; }
+.type-fairy { -fx-background-color: #EE99AC; }
+
+/* Outer table border */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #1a202c;
+    -fx-border-width: 2;
+    -fx-border-radius: 6;
+    -fx-table-cell-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Table header */
+/* Header background */
+.table-view .column-header-background {
+    -fx-background-color: #1a202c;
+}
+
+/* Header cells */
+.table-view .column-header {
+    -fx-background-color: #1a202c;
+    -fx-border-color: transparent transparent #5566aa transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+/* Header label text */
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 6 0 6 0;
+}
+
+/* Show sort arrow */
+.table-view .column-header .arrow {
+    -fx-background-color: transparent;
+    -fx-padding: 0 4 0 4;
+}
+
+/* Hover effect on header */
+.table-view .column-header:hover {
+    -fx-background-color: #273549;
+}
+
+/* Table rows */
+.table-row-cell {
+    -fx-background-color: #2e3748;
+    -fx-padding: 4 8 4 8;
+    -fx-font-size: 12px;
+    -fx-font-weight: 400;
+}
+
+/* Alternating row colors for subtle distinction */
+.table-row-cell:odd {
+    -fx-background-color: #2e3748;
+}
+.table-row-cell:even {
+    -fx-background-color: #37415c; /* Slightly lighter slate */
+}
+
+/* Hover highlight on rows */
+.table-row-cell:hover {
+    -fx-background-color: #3d4664;
+}
+
+/* Selected row highlight */
+.table-row-cell:selected {
+    -fx-background-color: #5566aa;
+}
+
+/* Table cells */
+.table-cell {
+    -fx-text-fill: white;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 6 0 6;
+    -fx-font-weight: 500;
+    -fx-font-size: 12px;
+}
+
+/* Center align numeric columns */
+.table-cell.numeric {
+    -fx-alignment: CENTER;
+}
+
+/* Prevent clipping of text, wrap if necessary */
+.table-cell .text {
+    -fx-wrapping-width: 100%;
+}
+
+/* ScrollBar styling (optional subtle) */
+
+/* Vertical ScrollBar */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #5566aa;
+    -fx-background-insets: 2;
+    -fx-background-radius: 5;
+}
+
+/* Horizontal ScrollBar */
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #5566aa;
+    -fx-background-insets: 2;
+    -fx-background-radius: 5;
+}
+
+/* ImageView inside sprite cells */
+.table-cell ImageView {
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.4), 3, 0, 0, 1);
+    -fx-fit-width: 40px;
+    -fx-fit-height: 40px;
+}
+
+/* HBox container inside sprite cell for image + number alignment */
+.table-cell > .hbox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 8; /* spacing between image and text */
+}
+
+/* Label inside sprite cell's HBox */
+.table-cell > .hbox > Label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+
+/* Make data cells in Total column bold */
+.table-column.total-column .table-cell {
+    -fx-font-weight: bold;
+}
+
+.total-column .table-cell {
+    -fx-font-weight: bold;
+}
+
+/* Target nameColumn cells by style class */
+.table-column.name-column .table-cell {
+    -fx-text-fill: #1E90FF; /* DodgerBlue */
+}
+
+/* Ensure table headers are bold and white */
+.pokemon-table .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header.header-align-left .label {
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-alignment: left;
+    -fx-padding: 0 0 0 10; /* Optional padding for spacing */
+}
+
+.table-view .column-header.header-align-right .label {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-text-alignment: right;
+    -fx-padding: 0 10 0 0; /* Optional padding */
+}
+
+/* ===== JFXComboBox ===== */
+.jfx-combo-box {
+    -fx-background-color:rgba(44, 49, 61, 1);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 0 8 0 8;
+    -fx-pref-height: 30px;
+    -fx-display-caret: false;
+}
+
+.jfx-combo-box .list-cell {
+    -fx-background-color: rgba(44, 49, 61, 1);
+    -fx-text-fill: white;
+    -fx-padding: 6 12;
+    -fx-pref-height: 30px;
+}
+
+/* Hovered option in dropdown */
+.jfx-combo-box .list-cell:hover {
+    -fx-background-color: #c37eff;
+    -fx-text-fill: white;
+}
+
+/* Popup dropdown styling */
+.jfx-combo-box-popup .list-view {
+    -fx-background-color: rgba(20, 20, 20, 0.95);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1;
+    -fx-padding: 5;
+    -fx-pref-width: 250px;
+}
+
+/* Optional: fix scrollbar if it shows */
+.jfx-combo-box-popup .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.jfx-combo-box .arrow {
+    -fx-background-color: white;
+}
+
+.jfx-combo-box > .text {
+    -fx-fill: white;
+}
+
+.jfx-combo-box .label {
+    -fx-text-fill: white;
+}
+
+/* ===== TextField ===== */
+.text-field {
+    -fx-background-color: rgba(44, 49, 61, 1);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 4 8 4 8;
+}
+
+.text-field:focused {
+    -fx-border-color: #c37eff;
+    -fx-background-color: rgba(195, 126, 255, 0.15);
+    -fx-effect: dropshadow(gaussian, #c37eff, 8, 0.2, 0, 0);
+}
+/* ===== JFXButton (tab-button) ===== */
+.tab-button {
+    -fx-background-color: rgba(44, 49, 61, 1);    /* dark base */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-effect: dropshadow(gaussian, #5a4d8f, 6, 0.4, 0, 0); /* subtle shadow */
+    -fx-cursor: hand;
+}
+
+/* Modern dark hover */
+.tab-button:hover {
+    -fx-background-color: #5a4d8f; /* muted deep purple */
+    -fx-effect: dropshadow(gaussian, #7c6fc1, 8, 0.5, 0, 0); /* lighter purple glow */
+}
+
+
+/* Main pane background with only bottom corners rounded, styled like titled-pane */
+.search-pane {
+    -fx-background-color: #0f1418; /* dark background */
+    -fx-background-insets: 0;
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-width: 1;
+    -fx-border-radius: 0 0 15 15; /* no top rounding, rounded bottom corners */
+    -fx-background-radius: 0 0 15 15;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 0, 3);
+    -fx-text-fill: white;
+    -fx-font-weight: normal;
+}
+
+/* Inner search pane container */
+.inner-search-pane {
+    -fx-background-color: #1a202c; /* dark navy base */
+    -fx-padding: 15;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-text-fill: white;
+}
+
+/* Content area inside the inner search pane */
+.inner-search-pane .content-area {
+    -fx-background-color: #2e3748; /* darker blue-gray */
+    -fx-padding: 15;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+}
+
+.wrapped-text {
+    -fx-fill: white;
+    -fx-font-size: 11px;
+}
+
+

@@ -4,16 +4,14 @@ import com.jfoenix.controls.JFXButton;
 import com.rbee.pokedexgui.manager.ContentManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
 
-    @FXML private VBox sidebarVBox;
     @FXML private StackPane contentArea;
     @FXML private JFXButton btnPokemon;
     @FXML private JFXButton btnMoves;
@@ -39,7 +37,7 @@ public class MainViewController implements Initializable {
 
     private void loadDashboard() {
         contentManager.loadModule(ContentManager.ModuleType.DASHBOARD);
-        updateActiveButton(null); // No button selected for dashboard
+        updateActiveButton(null);
     }
 
     private void loadPokemonModule() {

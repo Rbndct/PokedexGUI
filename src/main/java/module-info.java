@@ -3,6 +3,10 @@ module com.rbee.pokedexgui {
     requires javafx.fxml;
     requires java.desktop;
     requires com.jfoenix;
+    requires java.net.http;
+
+    // Add JSON library
+    requires org.json;
 
     // Export main application package (assuming your main app class is here)
     exports com.rbee.pokedexgui.app;
@@ -19,4 +23,11 @@ module com.rbee.pokedexgui {
 
     exports com.rbee.pokedexgui.controller.move;
     opens com.rbee.pokedexgui.controller.move to javafx.fxml;
+
+    exports com.rbee.pokedexgui.controller.item;
+    opens com.rbee.pokedexgui.controller.item to javafx.fxml;
+
+    // Added trainer controller package export and open for FXMLLoader
+    exports com.rbee.pokedexgui.controller.trainer;
+    opens com.rbee.pokedexgui.controller.trainer to javafx.fxml;
 }

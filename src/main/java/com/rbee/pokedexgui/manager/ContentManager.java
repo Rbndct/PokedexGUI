@@ -12,7 +12,7 @@ import java.util.Map;
 public class ContentManager {
     private static ContentManager instance;
     private StackPane contentArea;
-    private Map<ModuleType, Node> cachedModules = new HashMap<>();
+    private Map < ModuleType, Node > cachedModules = new HashMap < > ();
 
     public enum ModuleType {
         DASHBOARD("main/Dashboard.fxml"),
@@ -31,7 +31,6 @@ public class ContentManager {
             return "/com/rbee/pokedexgui/view/" + fxmlPath;
         }
     }
-
 
     private ContentManager() {}
 

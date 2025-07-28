@@ -64,4 +64,6 @@ public class SpriteImageCell extends TableCell<Pokemon, Integer> {
             setGraphic(container);
         }
     }
+
+
 }

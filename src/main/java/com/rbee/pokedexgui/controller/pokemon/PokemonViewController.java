@@ -1,198 +1,426 @@
 package com.rbee.pokedexgui.controller.pokemon;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.*;
 import com.rbee.pokedexgui.cells.SpriteImageCell;
+import com.rbee.pokedexgui.controller.pokemon.PokemonDetailViewController;
 import com.rbee.pokedexgui.util.TypeUtils;
+
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 import com.rbee.pokedexgui.model.pokemon.Pokemon;
 import com.rbee.pokedexgui.manager.PokemonManager;
 import com.rbee.pokedexgui.util.PokemonConstants;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
-import javax.swing.*;
+import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PokemonViewController implements Initializable {
-
+    /* Manager */
     private PokemonManager pokemonManager;
 
-    @FXML
-    private Pane dashboardContentPane;
-    @FXML
-    private ScrollPane addPokemonContentPane;
+    /* Snackbar Containers */
+    @FXML private StackPane contentStackPane;
+    @FXML private HBox snackbarContainer;
+    private JFXSnackbar snackbar;
 
-    @FXML
-    private VBox viewPokemonTab;
+    /* Dashboard Labels */
+    @FXML private Text totalPokemonLabel;
+    @FXML private Text topTypeLabel;
+    @FXML private Text highestBaseStatLabel;
 
-    @FXML
-    private Button dashboardTab;
+    /* Layout Containers */
+    @FXML private Pane dashboardContentPane;
+    @FXML private ScrollPane addPokemonContentPane;
+    @FXML private VBox viewPokemonTab;
 
-    @FXML
-    private Button addPokemonTab;
+    /* Navigation / Tab Buttons */
+    @FXML private Button dashboardTab;
+    @FXML private Button addPokemonTab;
+    @FXML private Button viewAllTab;
+    private List<Button> tabButtons;
 
-    @FXML
-    private Button viewAllTab;
+    /* Input Fields */
+    @FXML private TextField pokemonNameField;
 
-    @FXML
-    private Button searchTab;
+    /* ComboBoxes */
+    @FXML private JFXComboBox<String> primaryTypeComboBox;
+    @FXML private JFXComboBox<String> secondaryTypeComboBox;
+    @FXML private JFXComboBox<String> typeFilterBox;
 
-    private List < Button > tabButtons;
+    /* CheckBoxes */
+    @FXML private JFXCheckBox hasSecondaryTypeCheckBox;
+    @FXML private JFXCheckBox hasEvolvesFromCheckBox;
+    @FXML private JFXCheckBox hasEvolvesToCheckBox;
 
-    @FXML
-    private Spinner < Integer > pokemonNumberSpinner;
+    /* Stat Spinners */
+    @FXML private Spinner<Integer> spinnerHP;
+    @FXML private Spinner<Integer> spinnerAttack;
+    @FXML private Spinner<Integer> spinnerDefense;
+    @FXML private Spinner<Integer> spinnerSpecialAttack;
+    @FXML private Spinner<Integer> spinnerSpecialDefense;
+    @FXML private Spinner<Integer> spinnerSpeed;
 
-    @FXML
-    private TextField pokemonNameField;
+    /* Evolution Spinners */
+    @FXML private Spinner<Integer> pokemonNumberSpinner;
+    @FXML private Spinner<Integer> evolvesFromSpinner;
+    @FXML private Spinner<Integer> evolvesToSpinner;
+    @FXML private Spinner<Integer> evolutionLevelSpinner;
 
-    @FXML
-    private JFXComboBox < String > primaryTypeComboBox;
+    /* Action Buttons */
+    @FXML private JFXButton addButton;
 
-    @FXML
-    private JFXComboBox < String > secondaryTypeComboBox;
 
-    @FXML
-    private JFXComboBox < String > typeFilterBox;
+    /* TableView and Columns */
+    @FXML private TableView<Pokemon> pokemonTableView;
+    @FXML private TableColumn<Pokemon, Integer> idColumn;
+    @FXML private TableColumn<Pokemon, String> nameColumn;
+    @FXML private TableColumn<Pokemon, List<String>> typeColumn;
+    @FXML private TableColumn<Pokemon, Integer> hpColumn;
+    @FXML private TableColumn<Pokemon, Integer> atkColumn;
+    @FXML private TableColumn<Pokemon, Integer> defColumn;
+    @FXML private TableColumn<Pokemon, Integer> spaColumn;
+    @FXML private TableColumn<Pokemon, Integer> spdColumn;
+    @FXML private TableColumn<Pokemon, Integer> speColumn;
+    @FXML private TableColumn<Pokemon, Integer> totalColumn;
 
-    @FXML
-    private JFXCheckBox hasSecondaryTypeCheckBox;
-
-    @FXML
-    private Spinner < Integer > evolvesFromSpinner;
-
-    @FXML
-    private Spinner < Integer > evolvesToSpinner;
-
-    @FXML
-    private Spinner < Integer > evolutionLevelSpinner;
-
-    @FXML
-    private JFXCheckBox hasEvolvesFromCheckBox;
-
-    @FXML
-    private JFXCheckBox hasEvolvesToCheckBox;
-
-    @FXML
-    private Spinner < Integer > spinnerHP;
-
-    @FXML
-    private Spinner < Integer > spinnerAttack;
-
-    @FXML
-    private Spinner < Integer > spinnerDefense;
-
-    @FXML
-    private Spinner < Integer > spinnerSpecialAttack;
-
-    @FXML
-    private Spinner < Integer > spinnerSpecialDefense;
-
-    @FXML
-    private Spinner < Integer > spinnerSpeed;
-
-    @FXML
-    private JFXButton addButton;
-
-    @FXML
-    private TableView < Pokemon > pokemonTableView;
-
-    @FXML private TableColumn < Pokemon, Integer > idColumn;
-    @FXML private TableColumn < Pokemon, String > nameColumn;
-    @FXML private TableColumn < Pokemon, List < String >> typeColumn;
-    @FXML private TableColumn < Pokemon, Integer > hpColumn;
-    @FXML private TableColumn < Pokemon, Integer > atkColumn;
-    @FXML private TableColumn < Pokemon, Integer > defColumn;
-    @FXML private TableColumn < Pokemon, Integer > spaColumn;
-    @FXML private TableColumn < Pokemon, Integer > spdColumn;
-    @FXML private TableColumn < Pokemon, Integer > speColumn;
-    @FXML private TableColumn < Pokemon, Integer > totalColumn;
-
+    /* Filter/Search Components */
     @FXML private TextField searchTextField;
     @FXML private Button resetFiltersButton;
 
-    private FilteredList < Pokemon > filteredList;
+    /* Data Structures */
+    private FilteredList<Pokemon> filteredList;
+    private ObservableList<String> allTypes;
 
+    /* Tooltips for Validation */
     private final Tooltip pokemonNumberTooltip = new Tooltip();
     private final Tooltip pokemonNameTooltip = new Tooltip();
+    private final Tooltip primaryTypeTooltip = new Tooltip();
+    private final Tooltip secondaryTypeTooltip = new Tooltip();
+    private final Tooltip evolvesFromTooltip = new Tooltip();
+    private final Tooltip evolvesToTooltip = new Tooltip();
+    private final Tooltip evolutionLevelTooltip = new Tooltip();
 
-    private ObservableList < String > allTypes;
+    /* Validation Flags */
+    private boolean pokemonNumberSpinnerTouched = false;
+    private boolean pokemonNameFieldTouched = false;
+    private boolean primaryTypeTouched = false;
+    private boolean secondaryTypeTouched = false;
+    private boolean evolvesFromTouched = false;
+    private boolean evolvesToTouched = false;
+    private boolean evolutionLevelTouched = false;
+
+    /* Charts and Lists */
+    @FXML private PieChart typeDistributionChart;
+    @FXML private ListView<Pokemon> recentAdditionsListView;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Initialize manager and data structures
         this.pokemonManager = new PokemonManager();
 
+        // Initialize observable filtered list wrapping the master list
+        filteredList = new FilteredList<>(pokemonManager.getPokemonList(), p -> true);
 
+        // Setup UI components and bindings
         initializeTypeLists();
+
         setupColumns();
+        setupTotalColumnBoldStyle();
 
-        setupTotalColumnBoldStyle(); // modularized call here
-
+        // Style adjustments
         nameColumn.getStyleClass().add("name-column");
-
         pokemonTableView.setFixedCellSize(60);
+        pokemonTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
+        // Setup columns' cell factories and value factories
         idColumn.setCellFactory(col -> new SpriteImageCell());
         idColumn.setCellValueFactory(cellData ->
                 new SimpleIntegerProperty(cellData.getValue().getPokedexNumber()).asObject()
         );
-
         setupNameColumnWithTooltip(nameColumn);
 
         typeColumn.setCellValueFactory(cellData -> getCombinedTypes(cellData.getValue()));
         setupTypeColumnCellFactory(typeColumn);
 
-        pokemonTableView.setItems(pokemonManager.getPokemonList());
-        pokemonTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        // Bind filtered list to table
+        pokemonTableView.setItems(filteredList);
 
+        // Setup form controls and filters
         setupTabButtons();
         setupSpinnerValueFactories();
+
         setupTypeFilterComboBox(typeFilterBox);
         setupTypeInputComboBox(primaryTypeComboBox);
         setupTypeInputComboBox(secondaryTypeComboBox);
         setupSecondaryTypeToggle();
-        setupValidationListeners();
 
+        setupPrimaryTypeListener();
+
+        // Disable add button initially
         addButton.setDisable(true);
-        updateSaveButtonState();
 
-        // Wrap original list in FilteredList
-        filteredList = new FilteredList < > (pokemonManager.getPokemonList(), p -> true);
-
-        // Bind filtered list to TableView
-        pokemonTableView.setItems(filteredList);
-
+        // Setup filters and search
         setupSearchFilter();
-
         setupResetFiltersButton();
+
+        // Add validation listeners to inputs
+        addPokemonNumberSpinnerValidationListener();
+        addPokemonNameFieldValidationListener();
+        addTypeFieldValidationListeners();
+        addEvolutionValidationListeners();
+
+        // Setup snackbar for notifications
+        snackbar = new JFXSnackbar(contentStackPane);
+        snackbarContainer.setVisible(false);
+
+        // Initialize dashboard stats and charts
+        updateDashboardStats();
+        updateTypeDistributionChart();
+
+        // Setup recent additions list view
+        setupRecentAdditionsListView();
+
+        // Listen to master Pokémon list changes to update dashboard info dynamically
+        pokemonManager.getPokemonList().addListener((ListChangeListener<Pokemon>) c -> {
+            updateDashboardStats();
+            updateTypeDistributionChart();
+        });
+        setupPokemonRowClick();
+    }
+
+
+    private void addPokemonNameFieldValidationListener() {
+        // Focus listener to mark "touched"
+        pokemonNameField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            if (wasFocused && !isFocused) { // lost focus
+                pokemonNameFieldTouched = true;
+                validateAndUpdateForm();
+            }
+        });
+
+        // Text change listener — only validate if already touched
+        pokemonNameField.textProperty().addListener((obs, oldText, newText) -> {
+            if (!pokemonNameFieldTouched) return;
+            validateAndUpdateForm();
+        });
+    }
+
+    private boolean validatePokemonNameField() {
+        String input = pokemonNameField.getText() == null ? "" : pokemonNameField.getText().trim();
+
+        if (input.isEmpty()) {
+            showTooltip(pokemonNameField, pokemonNameTooltip, "Pokémon name cannot be empty.");
+            pokemonNameField.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            return false;
+        }
+
+        if (!input.matches("[A-Za-z.\\-\\s'()]+")) {
+            showTooltip(pokemonNameField, pokemonNameTooltip,
+                    "Invalid characters in name. Only letters, dashes, apostrophes, periods, parentheses, and spaces are allowed.");
+            pokemonNameField.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            return false;
+        }
+
+        if (pokemonManager.isPokemonNameTaken(input)) {
+            showTooltip(pokemonNameField, pokemonNameTooltip,
+                    "This Pokémon name already exists. If it's a regional variant, add the region in parentheses (e.g., 'Meowth (Galar)').");
+            pokemonNameField.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            return false;
+        }
+
+        // VALID
+        pokemonNameField.setStyle("-fx-border-color: transparent;");
+        pokemonNameTooltip.hide();
+        return true;
+    }
+
+    private void addPokemonNumberSpinnerValidationListener() {
+        pokemonNumberSpinner.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            if (wasFocused && !isFocused) { // lost focus = touched
+                pokemonNumberSpinnerTouched = true;
+                validateAndUpdateForm();
+            }
+        });
+
+        pokemonNumberSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!pokemonNumberSpinnerTouched) return;
+            validateAndUpdateForm();
+        });
+    }
+
+    private boolean validatePokemonNumberSpinner() {
+        Integer value = pokemonNumberSpinner.getValue();
+
+        if (value == null) {
+            showTooltip(pokemonNumberSpinner, pokemonNumberTooltip, "Pokédex number is required.");
+            pokemonNumberSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            return false;
+        }
+
+        if (value < PokemonConstants.MIN_POKEDEX || value > PokemonConstants.MAX_POKEDEX) {
+            showTooltip(pokemonNumberSpinner, pokemonNumberTooltip,
+                    "Number must be between " + PokemonConstants.MIN_POKEDEX + " and " + PokemonConstants.MAX_POKEDEX + ".");
+            pokemonNumberSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            return false;
+        }
+
+        if (!pokemonManager.isPokedexNumberUnique(value)) {
+            showTooltip(pokemonNumberSpinner, pokemonNumberTooltip, "This Pokédex number is already used.");
+            pokemonNumberSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            return false;
+        }
+
+        // Valid input
+        pokemonNumberSpinner.setStyle("-fx-border-color: transparent;");
+        pokemonNumberTooltip.hide();
+        return true;
+    }
+
+    private void addTypeFieldValidationListeners() {
+        // Primary type combo box focus tracking
+        primaryTypeComboBox.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            if (wasFocused && !isFocused) {
+                primaryTypeTouched = true;
+                validateAndUpdateForm();
+            }
+        });
+
+        // Selection listener for primary type
+        primaryTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (primaryTypeTouched) {
+                validateAndUpdateForm();
+            }
+        });
+
+        // Secondary type combo box focus tracking
+        secondaryTypeComboBox.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            if (wasFocused && !isFocused) {
+                secondaryTypeTouched = true;
+                validateAndUpdateForm();
+            }
+        });
+
+        // Selection listener for secondary type
+        secondaryTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (secondaryTypeTouched) {
+                validateAndUpdateForm();
+            }
+        });
+
+        // Listener for the checkbox (toggling secondary requirement)
+        hasSecondaryTypeCheckBox.selectedProperty().addListener((obs, wasChecked, isChecked) -> {
+            validateAndUpdateForm();
+        });
+    }
+
+    private boolean validateTypeComboBoxes() {
+        boolean isValid = true;
+
+        // Validate Primary Type
+        String primary = primaryTypeComboBox.getValue();
+        if (primary == null || primary.trim().isEmpty()) {
+            if (primaryTypeTouched) {
+                showTooltip(primaryTypeComboBox, primaryTypeTooltip, "Primary type must be selected.");
+                primaryTypeComboBox.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            }
+            isValid = false;
+        } else {
+            primaryTypeComboBox.setStyle("-fx-border-color: transparent;");
+            primaryTypeTooltip.hide();
+        }
+
+        // Validate Secondary Type only if required
+        if (hasSecondaryTypeCheckBox.isSelected()) {
+            String secondary = secondaryTypeComboBox.getValue();
+            if (secondary == null || secondary.trim().isEmpty()) {
+                if (secondaryTypeTouched) {
+                    showTooltip(secondaryTypeComboBox, secondaryTypeTooltip, "Secondary type must be selected.");
+                    secondaryTypeComboBox.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+                }
+                isValid = false;
+            } else {
+                secondaryTypeComboBox.setStyle("-fx-border-color: transparent;");
+                secondaryTypeTooltip.hide();
+            }
+        } else {
+            // If secondary not required, clear any red border or tooltip
+            secondaryTypeComboBox.setStyle("-fx-border-color: transparent;");
+            secondaryTypeTooltip.hide();
+        }
+
+        return isValid;
+    }
+
+    private void validateAndUpdateForm() {
+        boolean isPokemonNumberValid = validatePokemonNumberSpinner();
+        boolean isPokemonNameValid = validatePokemonNameField();
+        boolean areTypesValid = validateTypeComboBoxes();
+        boolean isEvolvesFromValid = validateEvolvesFromSpinner();
+        boolean isEvolvesToAndLevelValid = validateEvolvesToAndLevel();
+
+        updateFormState(isPokemonNumberValid, isPokemonNameValid, areTypesValid, isEvolvesFromValid, isEvolvesToAndLevelValid);
+    }
+
+    private void updateFormState(
+            boolean isPokemonNumberValid,
+            boolean isPokemonNameValid,
+            boolean areTypesValid,
+            boolean isEvolvesFromValid,
+            boolean isEvolvesToAndLevelValid
+    ) {
+        boolean allValid = isPokemonNumberValid &&
+                isPokemonNameValid &&
+                areTypesValid &&
+                isEvolvesFromValid &&
+                isEvolvesToAndLevelValid;
+        addButton.setDisable(!allValid);
+    }
+
+    private void showTooltip(Control control, Tooltip tooltip, String message) {
+        tooltip.setText(message);
+        if (control.isVisible() && control.getScene() != null && control.getScene().getWindow().isShowing()) {
+            javafx.geometry.Bounds bounds = control.localToScreen(control.getBoundsInLocal());
+            if (bounds != null && !tooltip.isShowing()) {
+                tooltip.show(control, bounds.getMinX(), bounds.getMaxY());
+            }
+        }
     }
 
     private void initializeTypeLists() {
         allTypes = FXCollections.observableArrayList(
                 Arrays.stream(TypeUtils.getValidTypes())
-                        .map(type -> type.substring(0,1).toUpperCase() + type.substring(1))
+                        .map(type -> type.substring(0, 1).toUpperCase() + type.substring(1))
                         .collect(Collectors.toList())
         );
     }
-
 
     private void setupResetFiltersButton() {
         resetFiltersButton.setOnAction(e -> {
@@ -272,14 +500,6 @@ public class PokemonViewController implements Initializable {
         setActiveTab(dashboardTab); // default active tab
     }
 
-    private void setupValidationListeners() {
-        setupPokemonNameValidation(); // Name field listener
-        setupPokemonNumberValidation(); // Number spinner
-        setupEvolutionCheckboxListeners();
-        setupPrimaryTypeListener();
-        setupEvolutionValidation();
-    }
-
     private void setupSpinnerValueFactories() {
         pokemonNumberSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(
@@ -336,135 +556,11 @@ public class PokemonViewController implements Initializable {
         restrictSpinnerToIntegers(spinnerSpecialDefense);
         restrictSpinnerToIntegers(spinnerSpeed);
     }
-
-    private boolean pokemonNameTouched = false;
-    private boolean pokemonNumberTouched = false;
-
-    private void setupPokemonNameValidation() {
-        pokemonNameField.setTooltip(pokemonNameTooltip);
-
-        // Track when the user has interacted with the field
-        pokemonNameField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
-                pokemonNameTouched = true;
-                validatePokemonName(); // Show error only if touched
-                updateSaveButtonState();
-            }
-        });
-
-        pokemonNameField.textProperty().addListener((obs, oldText, newText) -> {
-            validatePokemonName(); // Still validates as user types (but tooltip only shows if touched)
-            updateSaveButtonState();
-        });
-    }
-    private boolean validatePokemonName() {
-        String name = pokemonNameField.getText();
-
-        // Only validate/show errors if touched
-        if (!pokemonNameTouched) {
-            pokemonNameTooltip.hide();
-            pokemonNameField.setStyle("");
-            return true; // skip error showing if not touched yet
-        }
-
-        if (name == null || name.trim().isEmpty()) {
-            showErrorTooltip(pokemonNameField, pokemonNameTooltip, "Name cannot be empty.");
-            pokemonNameField.setStyle("-fx-border-color: red;");
-            return false;
-        }
-
-        if (!name.matches("[A-Za-z.\\-\\s'()]+")) {
-            showErrorTooltip(pokemonNameField, pokemonNameTooltip, "Invalid characters in name.");
-            pokemonNameField.setStyle("-fx-border-color: red;");
-            return false;
-        }
-
-        String formattedName = name.substring(0, 1).toUpperCase() + name.substring(1);
-
-        if (pokemonManager.isPokemonNameTaken(formattedName)) {
-            showErrorTooltip(pokemonNameField, pokemonNameTooltip, "This Pokémon name already exists.");
-            pokemonNameField.setStyle("-fx-border-color: red;");
-            return false;
-        }
-
-        // Valid name
-        pokemonNameTooltip.hide();
-        pokemonNameField.setStyle("");
-        return true;
-    }
-
-    private void setupPokemonNumberValidation() {
-        // Mark as touched when user interacts with the spinner editor
-        pokemonNumberSpinner.getEditor().focusedProperty().addListener((obs, wasFocused, isFocused) -> {
-            if (!isFocused) { // focus lost = considered "touched"
-                pokemonNumberTouched = true;
-                boolean valid = validatePokemonNumber();
-                updateSaveButtonState();
-            }
-        });
-
-        // Text input listener (manual edits)
-        pokemonNumberSpinner.getEditor().textProperty().addListener((obs, oldText, newText) -> {
-            if (!pokemonNumberTouched) return; // skip validation if not touched yet
-
-            boolean valid = validatePokemonNumber();
-            if (valid) {
-                pokemonNumberSpinner.setStyle("");
-                pokemonNumberTooltip.hide();
-            } else {
-                pokemonNumberSpinner.setStyle("-fx-border-color: red;");
-            }
-            updateSaveButtonState();
-        });
-
-        // Value change listener (via arrows or scroll)
-        pokemonNumberSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (!pokemonNumberTouched) return; // skip if not touched
-
-            boolean valid = validatePokemonNumber();
-            if (valid) {
-                pokemonNumberSpinner.setStyle("");
-                pokemonNumberTooltip.hide();
-            } else {
-                pokemonNumberSpinner.setStyle("-fx-border-color: red;");
-            }
-            updateSaveButtonState();
-        });
-    }
-    private boolean validatePokemonNumber() {
-        if (!pokemonNumberTouched) {
-            pokemonNumberTooltip.hide();
-            pokemonNumberSpinner.setStyle("");
-            return true;
-        }
-
-        String input = pokemonNumberSpinner.getEditor().getText();
-
-        try {
-            int number = Integer.parseInt(input);
-            if (number < PokemonConstants.MIN_POKEDEX || number > PokemonConstants.MAX_POKEDEX) {
-                showErrorTooltip(pokemonNumberSpinner, pokemonNumberTooltip,
-                        "Number must be between " + PokemonConstants.MIN_POKEDEX + " and " + PokemonConstants.MAX_POKEDEX);
-                return false;
-            }
-            if (pokemonManager.isPokedexNumberUnique(number)) {
-                showErrorTooltip(pokemonNumberSpinner, pokemonNumberTooltip,
-                        "This Pokédex number is already taken.");
-                return false;
-            }
-            pokemonNumberTooltip.hide();
-            return true;
-        } catch (NumberFormatException e) {
-            showErrorTooltip(pokemonNumberSpinner, pokemonNumberTooltip, "Please enter a valid number.");
-            return false;
-        }
-    }
-
-    private void setupTypeInputComboBox(JFXComboBox<String> comboBox) {
+    private void setupTypeInputComboBox(JFXComboBox < String > comboBox) {
         comboBox.setItems(FXCollections.observableArrayList(allTypes)); // assign a fresh copy!
         comboBox.setPromptText("Select Type");
 
-        Callback<ListView<String>, ListCell<String>> cellFactory = lv -> new ListCell<>() {
+        Callback < ListView < String > , ListCell < String >> cellFactory = lv -> new ListCell < > () {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -474,22 +570,20 @@ public class PokemonViewController implements Initializable {
         comboBox.setCellFactory(cellFactory);
         comboBox.setButtonCell(cellFactory.call(null));
     }
-
-
-    private void setupTypeFilterComboBox(JFXComboBox<String> comboBox) {
+    private void setupTypeFilterComboBox(JFXComboBox < String > comboBox) {
         // Get and capitalize all valid types
         String[] types = TypeUtils.getValidTypes();
-        ObservableList<String> capitalizedTypes = FXCollections.observableArrayList();
+        ObservableList < String > capitalizedTypes = FXCollections.observableArrayList();
 
         capitalizedTypes.add("Any"); // Add "Any" at the top
 
-        for (String type : types) {
+        for (String type: types) {
             capitalizedTypes.add(type.substring(0, 1).toUpperCase() + type.substring(1));
         }
 
         comboBox.setItems(capitalizedTypes);
 
-        Callback<ListView<String>, ListCell<String>> cellFactory = lv -> new ListCell<>() {
+        Callback < ListView < String > , ListCell < String >> cellFactory = lv -> new ListCell < > () {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -503,8 +597,6 @@ public class PokemonViewController implements Initializable {
         comboBox.valueProperty().addListener((obs, oldVal, newVal) -> applyCombinedFilter());
     }
 
-
-
     private void applyCombinedFilter() {
         String searchQuery = searchTextField.getText() == null ? "" : searchTextField.getText().toLowerCase().trim();
         String selectedType = typeFilterBox.getValue();
@@ -515,9 +607,13 @@ public class PokemonViewController implements Initializable {
                     String.valueOf(pokemon.getPokedexNumber()).contains(searchQuery) ||
                     String.format("%03d", pokemon.getPokedexNumber()).contains(searchQuery);
 
-            // Match type filter (check both primary and secondary)
-            boolean matchesType = (selectedType == null || selectedType.isEmpty()) ||
-                    pokemon.getPrimaryType().equalsIgnoreCase(selectedType) ||
+            // If selectedType is "Any" (or null/empty), accept all types
+            if (selectedType == null || selectedType.isEmpty() || selectedType.equalsIgnoreCase("Any")) {
+                return matchesSearch; // no filtering by type
+            }
+
+            // Otherwise, match primary or secondary type
+            boolean matchesType = pokemon.getPrimaryType().equalsIgnoreCase(selectedType) ||
                     (pokemon.getSecondaryType() != null && pokemon.getSecondaryType().equalsIgnoreCase(selectedType));
 
             return matchesSearch && matchesType;
@@ -533,7 +629,7 @@ public class PokemonViewController implements Initializable {
             }
 
             // Filter out the newType (case-insensitive)
-            ObservableList<String> filtered = allTypes.filtered(type -> !type.equalsIgnoreCase(newType));
+            ObservableList < String > filtered = allTypes.filtered(type -> !type.equalsIgnoreCase(newType));
 
             secondaryTypeComboBox.setItems(FXCollections.observableArrayList(filtered));
 
@@ -545,90 +641,133 @@ public class PokemonViewController implements Initializable {
         });
     }
 
+    private void addEvolutionValidationListeners() {
+        evolvesFromSpinner.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                evolvesFromTouched = true;
+                validateAndUpdateForm();
+            }
+        });
 
+        evolvesFromSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (evolvesFromTouched) {
+                validateAndUpdateForm();
+            }
+        });
 
-    private void setupEvolutionCheckboxListeners() {
-        // Initially disable spinners if checkbox not selected
+        evolvesToSpinner.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                evolvesToTouched = true;
+                validateAndUpdateForm();
+            }
+        });
+
+        evolvesToSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (evolvesToTouched) {
+                validateAndUpdateForm();
+            }
+        });
+
+        evolutionLevelSpinner.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                evolutionLevelTouched = true;
+                validateAndUpdateForm();
+            }
+        });
+
+        evolutionLevelSpinner.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (evolutionLevelTouched) {
+                validateAndUpdateForm();
+            }
+        });
+
+        hasEvolvesFromCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            evolvesFromSpinner.setDisable(!newVal);
+            validateAndUpdateForm();
+        });
+
+        hasEvolvesToCheckBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            evolvesToSpinner.setDisable(!newVal);
+            evolutionLevelSpinner.setDisable(!newVal);
+            validateAndUpdateForm();
+        });
+
+        // Optionally initialize the spinner enabled/disabled state here
         evolvesFromSpinner.setDisable(!hasEvolvesFromCheckBox.isSelected());
         evolvesToSpinner.setDisable(!hasEvolvesToCheckBox.isSelected());
         evolutionLevelSpinner.setDisable(!hasEvolvesToCheckBox.isSelected());
-
-        // Listener for "Has Evolves From?"
-        hasEvolvesFromCheckBox.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-            evolvesFromSpinner.setDisable(!isSelected);
-            // Removed resetting value here to preserve it
-        });
-
-        // Listener for "Has Evolves To?"
-        hasEvolvesToCheckBox.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-            evolvesToSpinner.setDisable(!isSelected);
-            evolutionLevelSpinner.setDisable(!isSelected);
-            // Removed resetting values here to preserve them
-        });
     }
 
-    private void validateEvolutionSelfReference() {
-        Integer dexNumber = pokemonNumberSpinner.getValue();
-        Integer evolvesFrom = evolvesFromSpinner.getValue();
-        Integer evolvesTo = evolvesToSpinner.getValue();
-
-        boolean isValid = true;
-
-        Tooltip evolvesFromTooltip = new Tooltip("A Pokémon cannot evolve from itself.");
-        Tooltip evolvesToTooltip = new Tooltip("A Pokémon cannot evolve to itself.");
-
-        // Evolves From Self-Reference
-        if (hasEvolvesFromCheckBox.isSelected() && evolvesFrom != null && evolvesFrom.equals(dexNumber)) {
-            evolvesFromSpinner.setStyle("-fx-border-color: red; -fx-border-width: 2;");
-            Tooltip.install(evolvesFromSpinner, evolvesFromTooltip);
-            isValid = false;
-        } else {
-            evolvesFromSpinner.setStyle("");
-            Tooltip.uninstall(evolvesFromSpinner, evolvesFromTooltip);
+    private boolean validateEvolvesToAndLevel() {
+        if (!hasEvolvesToCheckBox.isSelected()) {
+            // Clear styles and tooltips
+            evolvesToSpinner.setStyle("-fx-border-color: transparent;");
+            evolutionLevelSpinner.setStyle("-fx-border-color: transparent;");
+            evolvesToTooltip.hide();
+            evolutionLevelTooltip.hide();
+            return true;
         }
 
-        // Evolves To Self-Reference
-        if (hasEvolvesToCheckBox.isSelected() && evolvesTo != null && evolvesTo.equals(dexNumber)) {
-            evolvesToSpinner.setStyle("-fx-border-color: red; -fx-border-width: 2;");
-            Tooltip.install(evolvesToSpinner, evolvesToTooltip);
-            isValid = false;
-        } else {
-            evolvesToSpinner.setStyle("");
-            Tooltip.uninstall(evolvesToSpinner, evolvesToTooltip);
-        }
+        Integer pokemonNumber = pokemonNumberSpinner.getValue();
+        Integer evolvesToNumber = evolvesToSpinner.getValue();
+        Integer evolutionLevel = evolutionLevelSpinner.getValue();
 
-        // Control Add Button
-        addButton.setDisable(!isValid);
-    }
+        boolean valid = true;
 
-    private void setupEvolutionValidation() {
-        evolvesFromSpinner.valueProperty().addListener((obs, oldVal, newVal) -> validateEvolutionSelfReference());
-        evolvesToSpinner.valueProperty().addListener((obs, oldVal, newVal) -> validateEvolutionSelfReference());
-        pokemonNumberSpinner.valueProperty().addListener((obs, oldVal, newVal) -> validateEvolutionSelfReference());
-    }
-
-    private void showErrorTooltip(Control control, Tooltip tooltip, String message) {
-        tooltip.setText(message);
-        // Only show tooltip if control is visible and on screen
-        if (control.isVisible() && control.getScene() != null && control.getScene().getWindow().isShowing()) {
-            javafx.geometry.Bounds bounds = control.localToScreen(control.getBoundsInLocal());
-            if (bounds != null) {
-                if (!tooltip.isShowing()) {
-                    tooltip.show(control, bounds.getMinX(), bounds.getMaxY());
-                }
+        // Validate evolvesToSpinner
+        if (evolvesToNumber == null || evolvesToNumber.equals(pokemonNumber)) {
+            evolvesToSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            evolvesToTooltip.setText("Cannot evolve to itself.");
+            if (evolvesToSpinner.getScene() != null && evolvesToSpinner.getScene().getWindow().isShowing()) {
+                var bounds = evolvesToSpinner.localToScreen(evolvesToSpinner.getBoundsInLocal());
+                evolvesToTooltip.show(evolvesToSpinner, bounds.getMinX(), bounds.getMaxY());
             }
+            valid = false;
+        } else {
+            evolvesToSpinner.setStyle("-fx-border-color: transparent;");
+            evolvesToTooltip.hide();
         }
+
+        // Validate evolutionLevelSpinner
+        if (evolutionLevel == null || evolutionLevel < 2) {
+            evolutionLevelSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            evolutionLevelTooltip.setText("Evolution level must be 2 or higher.");
+            if (evolutionLevelSpinner.getScene() != null && evolutionLevelSpinner.getScene().getWindow().isShowing()) {
+                var bounds = evolutionLevelSpinner.localToScreen(evolutionLevelSpinner.getBoundsInLocal());
+                evolutionLevelTooltip.show(evolutionLevelSpinner, bounds.getMinX(), bounds.getMaxY());
+            }
+            valid = false;
+        } else {
+            evolutionLevelSpinner.setStyle("-fx-border-color: transparent;");
+            evolutionLevelTooltip.hide();
+        }
+
+        return valid;
     }
-    private void updateSaveButtonState() {
-        boolean isNameValid = validatePokemonName();
-        boolean isNumberValid = validatePokemonNumber();
-        boolean isPrimaryTypeSelected = primaryTypeComboBox.getValue() != null;
 
-        // Add more checks as needed, like secondary type or other fields
+    private boolean validateEvolvesFromSpinner() {
+        if (!hasEvolvesFromCheckBox.isSelected()) {
+            evolvesFromSpinner.setStyle("-fx-border-color: transparent;");
+            evolvesFromTooltip.hide();
+            return true;
+        }
 
-        boolean allValid = isNameValid && isNumberValid && isPrimaryTypeSelected;
+        Integer input = evolvesFromSpinner.getValue();
+        Integer pokemonNumber = pokemonNumberSpinner.getValue();
 
-        addButton.setDisable(!allValid);
+        if (input == null || input.equals(pokemonNumber)) {
+            evolvesFromSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            evolvesFromTooltip.setText("Cannot evolve from itself.");
+            if (evolvesFromSpinner.getScene() != null && evolvesFromSpinner.getScene().getWindow().isShowing()) {
+                var bounds = evolvesFromSpinner.localToScreen(evolvesFromSpinner.getBoundsInLocal());
+                evolvesFromTooltip.show(evolvesFromSpinner, bounds.getMinX(), bounds.getMaxY());
+            }
+            return false;
+        }
+
+        evolvesFromSpinner.setStyle("-fx-border-color: transparent;");
+        evolvesFromTooltip.hide();
+        return true;
     }
 
     private void setActiveTab(Button activeTab) {
@@ -640,11 +779,17 @@ public class PokemonViewController implements Initializable {
             activeTab.getStyleClass().add("active-tab");
         }
 
-        // Show corresponding content pane, hide others
+        // Hide all content panes first
         dashboardContentPane.setVisible(false);
         addPokemonContentPane.setVisible(false);
         viewPokemonTab.setVisible(false);
 
+        // Hide add Pokémon tooltips if we're switching away from addPokemonTab
+        if (activeTab != addPokemonTab) {
+            hideAddPokemonTooltips();
+        }
+
+        // Show corresponding content pane
         if (activeTab == dashboardTab) {
             dashboardContentPane.setVisible(true);
         } else if (activeTab == addPokemonTab) {
@@ -652,7 +797,16 @@ public class PokemonViewController implements Initializable {
         } else if (activeTab == viewAllTab) {
             viewPokemonTab.setVisible(true);
         }
-        // ... add other panes visibility conditions
+    }
+
+    private void hideAddPokemonTooltips() {
+        pokemonNumberTooltip.hide();
+        pokemonNameTooltip.hide();
+        primaryTypeTooltip.hide();
+        secondaryTypeTooltip.hide();
+        evolvesFromTooltip.hide();
+        evolvesToTooltip.hide();
+        evolutionLevelTooltip.hide();
     }
 
     private void restrictSpinnerToIntegers(Spinner < Integer > spinner) {
@@ -698,22 +852,30 @@ public class PokemonViewController implements Initializable {
             int speed = spinnerSpeed.getValue();
 
             Pokemon.PokemonStats stats = new Pokemon.PokemonStats(
-                    hp, attack, defense, specialAttack, specialDefense, speed);
+                    hp, attack, defense, specialAttack, specialDefense, speed
+            );
 
             Pokemon.PokemonEvolutionInfo evolution = new Pokemon.PokemonEvolutionInfo(
-                    evolvesFrom, evolvesTo, evolutionLevel);
+                    evolvesFrom, evolvesTo, evolutionLevel
+            );
 
             Pokemon pokemon = new Pokemon(
                     pokedexNumber, name, primaryType, secondaryType, stats, evolution, ""
             );
 
-            pokemonManager.getPokemonList().add(pokemon);
-            JOptionPane.showMessageDialog(null, "Pokémon added successfully: " + name,
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            pokemonManager.addPokemon(pokemon);
+
+            JFXSnackbarLayout layout = new JFXSnackbarLayout("Pokémon added successfully: " + name);
+            snackbar.enqueue(new JFXSnackbar.SnackbarEvent(layout, Duration.seconds(3)));
+
             resetFormFields();
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+
+
+            JFXSnackbarLayout errorLayout = new JFXSnackbarLayout("Failed to add Pokémon. Please try again.");
+            snackbar.enqueue(new JFXSnackbar.SnackbarEvent(errorLayout, Duration.seconds(3)));
         }
     }
 
@@ -735,7 +897,15 @@ public class PokemonViewController implements Initializable {
         spinnerSpecialDefense.getValueFactory().setValue(PokemonConstants.DEFAULT_BASE_STAT);
         spinnerSpeed.getValueFactory().setValue(PokemonConstants.DEFAULT_BASE_STAT);
 
-        updateSaveButtonState();
+        // Hide all tooltips here
+        pokemonNumberTooltip.hide();
+        pokemonNameTooltip.hide();
+        primaryTypeTooltip.hide();
+        secondaryTypeTooltip.hide();
+        evolvesFromTooltip.hide();
+        evolvesToTooltip.hide();
+        evolutionLevelTooltip.hide();
+
     }
 
     private void setupSecondaryTypeToggle() {
@@ -750,7 +920,6 @@ public class PokemonViewController implements Initializable {
             }
         });
     }
-
 
     public void setupTypeColumnCellFactory(TableColumn < Pokemon, List < String >> typeColumn) {
         typeColumn.setCellFactory(col -> new TableCell < > () {
@@ -835,5 +1004,111 @@ public class PokemonViewController implements Initializable {
         totalColumn.setCellValueFactory(cellData ->
                 new SimpleIntegerProperty(cellData.getValue().getPokemonStats().getTotalBaseStats()).asObject());
     }
+
+    public void updateDashboardStats() {
+        int total = pokemonManager.getTotalPokemonCount();
+        Map.Entry < String, Long > topTypeEntry = pokemonManager.getTopType();
+        Pokemon highestStatPokemon = pokemonManager.getHighestBaseStatPokemon();
+
+        totalPokemonLabel.setText(String.valueOf(total));
+
+        if (topTypeEntry != null) {
+            topTypeLabel.setText(topTypeEntry.getKey() + " (" + topTypeEntry.getValue() + ")");
+        } else {
+            topTypeLabel.setText("N/A");
+        }
+
+        if (highestStatPokemon != null) {
+            int totalStats = highestStatPokemon.getPokemonStats().getHp() +
+                    highestStatPokemon.getPokemonStats().getAttack() +
+                    highestStatPokemon.getPokemonStats().getDefense() +
+                    highestStatPokemon.getPokemonStats().getSpAttack() +
+                    highestStatPokemon.getPokemonStats().getSpDefense() +
+                    highestStatPokemon.getPokemonStats().getSpeed();
+            highestBaseStatLabel.setText(highestStatPokemon.getName() + " (" + totalStats + ")");
+        } else {
+            highestBaseStatLabel.setText("N/A");
+        }
+    }
+
+    private void updateTypeDistributionChart() {
+        Map < String, Integer > typeCountMap = new HashMap < > ();
+
+        for (Pokemon p: pokemonManager.getPokemonList()) {
+            String type1 = p.getPrimaryType();
+            String type2 = p.getSecondaryType();
+
+            typeCountMap.put(type1, typeCountMap.getOrDefault(type1, 0) + 1);
+
+            if (type2 != null && !type2.isEmpty() && !type2.equalsIgnoreCase(type1)) {
+                typeCountMap.put(type2, typeCountMap.getOrDefault(type2, 0) + 1);
+            }
+        }
+
+        ObservableList < PieChart.Data > pieChartData = FXCollections.observableArrayList();
+        for (Map.Entry < String, Integer > entry: typeCountMap.entrySet()) {
+            pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+        }
+
+        typeDistributionChart.setData(pieChartData);
+    }
+
+    private void setupRecentAdditionsListView() {
+        recentAdditionsListView.setItems(pokemonManager.getRecentAdditions());
+
+        recentAdditionsListView.setCellFactory(list -> new ListCell < > () {
+            @Override
+            protected void updateItem(Pokemon pokemon, boolean empty) {
+                super.updateItem(pokemon, empty);
+                if (empty || pokemon == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(pokemon.getName() + " (#" + pokemon.getPokedexNumber() + ")");
+                }
+            }
+        });
+    }
+
+    public void handleResetPokemonForm(ActionEvent actionEvent) {
+        resetFormFields();
+    }
+
+    private void setupPokemonRowClick() {
+        pokemonTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Double-click
+                Pokemon selectedPokemon = pokemonTableView.getSelectionModel().getSelectedItem();
+                if (selectedPokemon != null) {
+                    openPokemonDetailView(selectedPokemon);
+                }
+            }
+        });
+    }
+
+
+    private void openPokemonDetailView(Pokemon selectedPokemon) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/rbee/pokedexgui/view/module/pokemon/PokemonDetailPane.fxml"));
+            Parent root = loader.load();
+
+            PokemonDetailViewController controller = loader.getController();
+
+            // Inject your PokemonManager instance here BEFORE calling setPokemon
+            controller.setPokemonManager(this.pokemonManager);  // assuming 'this' has the PokemonManager instance
+
+            controller.setPokemon(selectedPokemon); // pass data
+
+            Stage stage = new Stage();
+            stage.setTitle(selectedPokemon.getName() + " - Details");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
 }

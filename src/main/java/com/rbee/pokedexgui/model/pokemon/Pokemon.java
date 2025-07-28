@@ -1,5 +1,7 @@
 package com.rbee.pokedexgui.model.pokemon;
 
+import com.rbee.pokedexgui.manager.MoveManager;
+import com.rbee.pokedexgui.model.move.Move;
 import com.rbee.pokedexgui.util.PokemonConstants;
 
 import java.util.ArrayList;
@@ -21,9 +23,10 @@ public class Pokemon {
     private final String secondaryType; // optional
     private final int baseLevel;
 
-
-    private ArrayList<String> moveSet = new ArrayList<>();
+    private ArrayList < String > moveSet = new ArrayList < > ();
     private String heldItem;
+
+
 
     /**
      * Instantiates a new Pokemon.
@@ -49,7 +52,7 @@ public class Pokemon {
         this.pokemonEvolutionInfo = pokemonEvolutionInfo;
         this.heldItem = heldItem;
 
-        this.moveSet = new ArrayList<>();
+        this.moveSet = new ArrayList < > ();
         // Default moves:
         addDefaultMoves();
 
@@ -123,8 +126,8 @@ public class Pokemon {
      *
      * @return the move set
      */
-    public List<String> getMoveSet() {
-        return new ArrayList<>(moveSet);
+    public List < String > getMoveSet() {
+        return new ArrayList < > (moveSet);
     }
 
     /**
@@ -145,20 +148,28 @@ public class Pokemon {
         this.heldItem = heldItem;
     }
 
-
     /**
      * Sets move set.
      *
      * @param moveSet the move set
      */
-    public void setMoveSet(ArrayList<String> moveSet) {
+    public void setMoveSet(ArrayList < String > moveSet) {
         this.moveSet = moveSet;
     }
 
     private void addDefaultMoves() {
-        moveSet.add("Tackle");
-        moveSet.add("Defend");
+        MoveManager moveManager = MoveManager.getInstance();  // get your singleton instance
+
+        Move tackle = moveManager.getMoveByName("Tackle");
+        Move defend = moveManager.getMoveByName("Defend");
+
+        if (tackle != null) moveSet.add(tackle.getName());
+        if (defend != null) moveSet.add(defend.getName());
     }
+
+
+
+
 
     /**
      * The type Pokemon stats.
@@ -227,7 +238,6 @@ public class Pokemon {
         public int getSpAttack() {
             return spAttack;
         }
-
 
         /**
          * Gets sp defense.
@@ -310,36 +320,6 @@ public class Pokemon {
         public int getEvolutionLevel() {
             return evolutionLevel;
         }
-    }
-
-    public void display() {
-        PokemonStats s = this.getPokemonStats();
-
-        int total = s.getHp() +
-                s.getAttack() +
-                s.getDefense() +
-                s.getSpAttack() +
-                s.getSpDefense() +
-                s.getSpeed();
-
-        String types = this.getPrimaryType();
-        if (this.getSecondaryType() != null && !this.getSecondaryType().isEmpty()) {
-            types += "/" + this.getSecondaryType();
-        }
-
-        String formatRow = "%-12s %-12s %-15s %-7d %-5d %-8d %-8d %-14d %-14d %-6d\n";
-        System.out.printf(formatRow,
-                String.format("%03d", this.getPokedexNumber()),
-                this.getName(),
-                types,
-                total,
-                s.getHp(),
-                s.getAttack(),
-                s.getDefense(),
-                s.getSpAttack(),
-                s.getSpDefense(),
-                s.getSpeed()
-        );
     }
 
 }

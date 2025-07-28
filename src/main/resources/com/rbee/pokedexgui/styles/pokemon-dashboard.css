@@ -67,7 +67,7 @@
 
 /* Main number stat - bigger and bold */
 .stat-total-pokemon {
-    -fx-font-size: 28px;
+    -fx-font-size: 20px;
     -fx-font-weight: 600;
     -fx-text-fill: white;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 3, 0.3, 0, 1);
@@ -125,7 +125,7 @@
 
 /* Stat text - bold and white */
 .stat-highest-base {
-    -fx-font-size: 28px;
+    -fx-font-size: 20px;
     -fx-font-weight: 600;
     -fx-fill: white;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 3, 0.3, 0, 1);
@@ -200,3 +200,22 @@
     -fx-padding: 15;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 0, 3);
 }
+
+.chart-pie-label {
+    -fx-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.list-recent-additions {
+    -fx-background-color: transparent;  /* transparent background */
+    -fx-control-inner-background: transparent; /* transparent inner background */
+    -fx-text-fill: white; /* white text */
+}
+
+/* Also ensure the cells have white text */
+.list-recent-additions .list-cell {
+    -fx-background-color: transparent; /* transparent cell bg */
+    -fx-text-fill: white; /* white text */
+}
+

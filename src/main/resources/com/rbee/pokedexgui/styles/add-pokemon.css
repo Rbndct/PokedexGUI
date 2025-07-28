@@ -271,3 +271,23 @@
  .modern-scrollpane .scroll-bar:horizontal:hover .thumb {
      -fx-background-color: #64B5F6; /* lighter blue on hover */
  }
+
+.jfx-snackbar {
+    -fx-background-color: rgba(123, 31, 162, 0.9); /* Master Ball purple with 90% opacity */
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 24px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6, 0, 0, 2);
+}
+
+.jfx-snackbar .jfx-snackbar-message {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.jfx-snackbar .icon {
+    -fx-fit-width: 24px;
+    -fx-fit-height: 24px;
+    -fx-margin-right: 12px;
+}

@@ -25,6 +25,10 @@ public class MoveTypeIconCell extends TableCell<Move, String> {
         iconBox.setAlignment(Pos.CENTER_LEFT);
         iconBox.getChildren().addAll(primaryTypeImageView, secondaryTypeImageView);
 
+        primaryTypeImageView.setStyle("-fx-fit-width: 24px; -fx-fit-height: 24px;");
+        secondaryTypeImageView.setStyle("-fx-fit-width: 24px; -fx-fit-height: 24px;");
+
+
         nameLabel.setTextFill(Color.WHITE);
         nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
@@ -75,7 +79,7 @@ public class MoveTypeIconCell extends TableCell<Move, String> {
         String lowerType = type.toLowerCase();
         String url = "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/masters/" + lowerType + ".png";
 
-        Image image = new Image(url, 24, 24, true, true, true);
+        Image image = new Image(url, 20, 20, true, true, true);
 
         image.errorProperty().addListener((obs, wasError, isError) -> {
             if (isError) imageView.setImage(PLACEHOLDER_IMAGE);

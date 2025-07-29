@@ -1,7 +1,10 @@
 package com.rbee.pokedexgui.controller.loading;
 
 
+import com.rbee.pokedexgui.controller.main.DashboardController;
+import com.rbee.pokedexgui.manager.ContentManager;
 import javafx.animation.*;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -64,17 +67,53 @@ public class LoadingScreenController {
             soundPlayed = true;
         }
         Font.loadFont(getClass().getResourceAsStream("com/rbee/pokedexgui/fonts/PressStart2P-Regular.ttf"), 10);
-
         Font.loadFont(getClass().getResourceAsStream("/com/rbee/pokedexgui/fonts/VT323-Regular.ttf"), 10);
 
         System.out.println("[DEBUG] Forcing button visible.");
-        startButton.setVisible(true); // 💥 Make sure this is true
-        startButton.setDisable(false);
-        startButton.toFront();        // Make sure it's above background
+
+        // Disable start button initially until preload finishes
+        startButton.setVisible(true);
+        startButton.setDisable(true);
+        startButton.toFront();
 
         applyPokedexTitleEffects();
         startLoadingMessageLoop();
+
+        // Start async preload
+        startAsyncPreload();
     }
+
+    private void startAsyncPreload() {
+        Task<Void> preloadTask = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                ContentManager contentManager = ContentManager.getInstance();
+                contentManager.preloadAllModules();
+                return null;
+            }
+        };
+
+        // Optional: bind progress if you add progress reporting to preloadAllModules()
+        // progressBar.progressProperty().bind(preloadTask.progressProperty());
+
+        preloadTask.setOnSucceeded(event -> {
+            System.out.println("[DEBUG] Preload finished, start button enabled.");
+            startButton.setDisable(false);
+        });
+
+        preloadTask.setOnFailed(event -> {
+            System.err.println("[ERROR] Preload failed!");
+            startButton.setDisable(false); // allow user to continue anyway
+        });
+
+        Thread preloadThread = new Thread(preloadTask);
+        preloadThread.setDaemon(true);
+        preloadThread.start();
+    }
+
+
+
+
 
     private int lastIndex = -1; // Keeps track of the last message shown
 

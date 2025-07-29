@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 public class MainViewController implements Initializable {
 
     @FXML private StackPane contentArea;
+    @FXML private JFXButton btnDashboard;
     @FXML private JFXButton btnPokemon;
     @FXML private JFXButton btnMoves;
     @FXML private JFXButton btnItems;
@@ -26,6 +27,7 @@ public class MainViewController implements Initializable {
         contentManager.setContentArea(contentArea);
 
         // Set up button actions
+        btnDashboard.setOnAction(e -> loadDashboard());
         btnPokemon.setOnAction(e -> loadPokemonModule());
         btnMoves.setOnAction(e -> loadMovesModule());
         btnItems.setOnAction(e -> loadItemsModule());

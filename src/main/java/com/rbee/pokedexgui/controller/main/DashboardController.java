@@ -4,11 +4,16 @@ import com.jfoenix.controls.JFXButton;
 import com.rbee.pokedexgui.manager.ContentManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.application.HostServices;
+
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
+
+    private HostServices hostServices;
+
 
     @FXML private JFXButton pokemonCard;
     @FXML private JFXButton movesCard;
@@ -27,4 +32,16 @@ public class DashboardController implements Initializable {
         itemsCard.setOnAction(e -> contentManager.loadModule(ContentManager.ModuleType.ITEMS));
         trainersCard.setOnAction(e -> contentManager.loadModule(ContentManager.ModuleType.TRAINERS));
     }
+
+    public void openGitHub() {
+        if (hostServices != null) {
+            hostServices.showDocument("https://github.com/rbee/pokedex");
+        }
+    }
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
+
+
 }

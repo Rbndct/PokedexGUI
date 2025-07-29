@@ -6,6 +6,7 @@ import com.rbee.pokedexgui.manager.MoveManager;
 import com.rbee.pokedexgui.model.move.Move;
 import com.rbee.pokedexgui.model.pokemon.Pokemon;
 import com.rbee.pokedexgui.util.TypeUtils;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -481,6 +482,11 @@ public class MoveViewController implements Initializable {
             javafx.geometry.Bounds bounds = control.localToScreen(control.getBoundsInLocal());
             if (bounds != null && !tooltip.isShowing()) {
                 tooltip.show(control, bounds.getMinX(), bounds.getMaxY());
+
+                // Hide the tooltip automatically after 3 seconds
+                PauseTransition delay = new PauseTransition(Duration.seconds(3));
+                delay.setOnFinished(event -> tooltip.hide());
+                delay.play();
             }
         }
     }

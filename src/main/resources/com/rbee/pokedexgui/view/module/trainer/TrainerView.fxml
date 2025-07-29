@@ -59,18 +59,22 @@
 
                      <Region prefHeight="70.0" prefWidth="15.0" />
 
-                     <!-- Tab Buttons -->
-                     <HBox fx:id="tabButtonContainer" alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="378.0" styleClass="tab-container">
+                     <!-- Trainer Tab Buttons -->
+                     <HBox fx:id="trainerTabButtonContainer" alignment="CENTER_RIGHT" prefHeight="70.0" prefWidth="378.0" styleClass="tab-container">
                          <children>
-                             <JFXButton fx:id="dashboardTab" prefHeight="27.0" prefWidth="140.0" text="Dashboard" textFill="WHITE">
-                           <styleClass>
-                              <String fx:value="active-tab" />
-                              <String fx:value="tab-button" />
-                           </styleClass></JFXButton>
-                             <JFXButton fx:id="addPokemonTab" prefHeight="27.0" prefWidth="140.0" styleClass="tab-button" text="Add " textFill="WHITE" />
-                             <JFXButton fx:id="viewAllTab" prefHeight="27.0" prefWidth="140.0" styleClass="tab-button" text="View" textFill="WHITE" />
+                             <JFXButton fx:id="trainerDashboardTab" prefHeight="27.0" prefWidth="140.0" text="Dashboard" textFill="WHITE">
+                                 <styleClass>
+                                     <String fx:value="active-tab" />
+                                     <String fx:value="tab-button" />
+                                 </styleClass>
+                             </JFXButton>
+
+                             <JFXButton fx:id="addTrainerTab" prefHeight="27.0" prefWidth="140.0" styleClass="tab-button" text="Add " textFill="WHITE" />
+
+                             <JFXButton fx:id="viewTrainerTab" prefHeight="27.0" prefWidth="140.0" styleClass="tab-button" text="View" textFill="WHITE" />
                          </children>
                      </HBox>
+
                  </children>
                <opaqueInsets>
                   <Insets left="5.0" />
@@ -88,7 +92,7 @@
          <children>
 
              <!-- Pokemon Dashboard View -->
-            <Pane fx:id="dashboardContentPane" prefHeight="420.0" prefWidth="720.0" styleClass="modern-pane">
+            <Pane fx:id="trainerDashboardContentPane" prefHeight="420.0" prefWidth="720.0" styleClass="modern-pane" visible="false">
                <children>
 
                    <!-- Top Row Stats -->
@@ -187,7 +191,7 @@
                   </HBox>
                </children>
             </Pane>
-            <ScrollPane fx:id="addPokemonContentPane" hbarPolicy="NEVER" prefHeight="567.0" prefWidth="710.0" styleClass="modern-scrollpane" visible="false">
+            <ScrollPane fx:id="addTrainerContentPane" hbarPolicy="NEVER" prefHeight="567.0" prefWidth="710.0" styleClass="modern-scrollpane">
                <content>
                   <VBox prefHeight="482.0" prefWidth="676.0" spacing="15.0" styleClass="titled-pane-content-vbox">
                      <children>
@@ -206,19 +210,19 @@
                                           <RowConstraints minHeight="50.0" prefHeight="30.0" vgrow="ALWAYS" />
                                       </rowConstraints>
                                        <children>
-                                          <TextField fx:id="trainerNameField" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="250.0" styleClass="text-field" GridPane.columnIndex="1" />
+                                          <TextField fx:id="trainerNameField" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="250.0" promptText="Input Trainer Name" styleClass="text-field" GridPane.columnIndex="1" />
                                           <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trainer Name">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
                                           </Text>
-                                          <DatePicker fx:id="birthDateField" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <DatePicker fx:id="birthDateField" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="250.0" promptText="Select Birthdate" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Birthdate" GridPane.rowIndex="1">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
                                           </Text>
-                                          <JFXComboBox fx:id="sexComboBox" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <JFXComboBox fx:id="sexComboBox" maxHeight="30.0" maxWidth="250.0" minHeight="30.0" minWidth="250.0" prefHeight="30.0" prefWidth="250.0" promptText="Select Sex" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                           <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Sex" GridPane.rowIndex="2">
                                              <font>
                                                 <Font size="20.0" />
@@ -236,7 +240,7 @@
                               </VBox>
                            </content>
                         </TitledPane>
-                        <TitledPane expanded="false" prefHeight="50.0" prefWidth="200.0" text=" Location and Background">
+                        <TitledPane prefHeight="50.0" prefWidth="200.0" text=" Location and Background">
                            <content>
                               <VBox prefHeight="141.0" prefWidth="698.0">
                                  <children>
@@ -249,7 +253,7 @@
                                           <RowConstraints minHeight="50.0" vgrow="ALWAYS" />
                                        </rowConstraints>
                                        <children>
-                                          <JFXComboBox fx:id="hometownComboBox" minHeight="30.0" minWidth="250.0" styleClass="jfx-combo-box" GridPane.columnIndex="1" />
+                                          <JFXComboBox fx:id="hometownComboBox" minHeight="30.0" minWidth="250.0" promptText="Select Hometown" styleClass="jfx-combo-box" GridPane.columnIndex="1" />
                                           <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Hometown">
                                              <font>
                                                 <Font size="20.0" />
@@ -288,8 +292,8 @@
                            </content>
                         </TitledPane>
                          <HBox alignment="CENTER_RIGHT" prefHeight="91.0" prefWidth="646.0" spacing="20" style="-fx-padding: 20;" VBox.vgrow="NEVER">
-                             <JFXButton fx:id="clearButton" buttonType="RAISED" styleClass="clear-button" text="Clear" />
-                             <JFXButton fx:id="addButton" buttonType="RAISED" styleClass="add-pokemon-button" text="Add Trainer" />
+                             <JFXButton fx:id="clearButton" buttonType="RAISED" onAction="#handleResetTrainerForm" styleClass="clear-button" text="Clear" />
+                             <JFXButton fx:id="addButton" buttonType="RAISED" onAction="#handleAddTrainer" styleClass="add-pokemon-button" text="Add Trainer" />
                          </HBox>
 
 
@@ -299,7 +303,7 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <VBox fx:id="viewPokemonTab" prefHeight="420.0" prefWidth="720.0" styleClass="search-pane" stylesheets="@../../../styles/view-pokemon.css" visible="false">
+            <VBox fx:id="viewTrainerContentPane" prefHeight="420.0" prefWidth="720.0" styleClass="search-pane" stylesheets="@../../../styles/view-pokemon.css" visible="false">
                <children>
                   <HBox alignment="CENTER" prefHeight="31.0" prefWidth="710.0" styleClass="header-box">
                      <children>

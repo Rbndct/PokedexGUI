@@ -9,14 +9,14 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import com.jfoenix.controls.JFXListView;
 
 import java.net.URI;
@@ -24,11 +24,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,7 +51,8 @@ public class PokemonDetailViewController {
     @FXML private Label totalStatLabel;
 
     @FXML private FlowPane pokemonWeaknessFlowPane;
-    @FXML private JFXListView<String> pokemonMoveSet;
+    @FXML private JFXListView<Move> pokemonMoveSet;
+
 
 
     @FXML private HBox evolutionHBox;
@@ -66,7 +66,6 @@ public class PokemonDetailViewController {
 
     @FXML
     public void initialize() {
-        // Setup things that don't depend on pokemonManager
         setupPokemonMoveSetCellFactory();
     }
 
@@ -124,15 +123,21 @@ public class PokemonDetailViewController {
         // Load sprite
         updatePokemonSprite(pokemon.getPokedexNumber());
 
-        // Populate moveset list view
-        List<String> moves = pokemon.getMoveSet();
-        ObservableList<String> observableMoves = FXCollections.observableArrayList(moves);
-        pokemonMoveSet.setItems(observableMoves);
+        populatePokemonMoves(pokemon);
 
         displayWeaknesses(pokemon.getPrimaryType(), pokemon.getSecondaryType());
         displayEvolutionChain(pokemon.getPokemonEvolutionInfo());
-
     }
+
+    private void populatePokemonMoves(Pokemon pokemon) {
+        if (pokemon == null) {
+            pokemonMoveSet.setItems(FXCollections.emptyObservableList());
+            return;
+        }
+
+        pokemonMoveSet.setItems(pokemon.getMoveSet());
+    }
+
 
 
     private void fetchPokemonDescription(int pokedexNumber, String customName) {
@@ -244,7 +249,7 @@ public class PokemonDetailViewController {
     }
 
     private void setupPokemonMoveSetCellFactory() {
-        pokemonMoveSet.setCellFactory(lv -> new ListCell<String>() {
+        pokemonMoveSet.setCellFactory(lv -> new ListCell<Move>() {
             private final ImageView primaryTypeImageView = createTypeImageView();
             private final ImageView secondaryTypeImageView = createTypeImageView();
             private final Label nameLabel = new Label();
@@ -253,34 +258,40 @@ public class PokemonDetailViewController {
 
             {
                 iconBox.getChildren().addAll(primaryTypeImageView, secondaryTypeImageView);
+                iconBox.setAlignment(Pos.CENTER_LEFT);
+
                 container.getChildren().addAll(iconBox, nameLabel);
                 container.setAlignment(Pos.CENTER_LEFT);
 
+                // Set smaller fixed height for the cell
+                setPrefHeight(30);
+                setMinHeight(30);
+                setMaxHeight(30);
+
                 nameLabel.setTextFill(Color.WHITE);
-                nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-                setPrefHeight(40);
+                nameLabel.setStyle("-fx-font-weight: normal; -fx-font-size: 12px;"); // smaller font
+
+                // Optional: Reduce padding/margin if needed
+                container.setPadding(new Insets(2, 0, 2, 0));
             }
 
             @Override
-            protected void updateItem(String moveName, boolean empty) {
-                super.updateItem(moveName, empty);
+            protected void updateItem(Move move, boolean empty) {
+                super.updateItem(move, empty);
 
-                if (empty || moveName == null || moveName.isBlank()) {
+                if (empty || move == null) {
                     setText(null);
                     setGraphic(null);
                     return;
                 }
 
-                nameLabel.setText(moveName);
+                nameLabel.setText(move.getName());
 
-                // Lookup Move object by name from MoveManager singleton
-                Move move = MoveManager.getInstance().getMoveByName(moveName);
+                loadTypeIcon(move.getPrimaryType(), primaryTypeImageView);
 
-                if (move != null) {
-                    loadTypeIcon(move.getPrimaryType(), primaryTypeImageView);
+                if (move.getSecondaryType() != null && !move.getSecondaryType().isEmpty()) {
                     loadTypeIcon(move.getSecondaryType(), secondaryTypeImageView);
                 } else {
-                    primaryTypeImageView.setImage(null);
                     secondaryTypeImageView.setImage(null);
                 }
 
@@ -289,6 +300,9 @@ public class PokemonDetailViewController {
             }
         });
     }
+
+
+
 
     private void displayWeaknesses(String primaryType, String secondaryType) {
         TypeUtils.fetchWeaknessesAsync(primaryType, secondaryType)

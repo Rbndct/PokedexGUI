@@ -3,6 +3,8 @@ package com.rbee.pokedexgui.model.pokemon;
 import com.rbee.pokedexgui.manager.MoveManager;
 import com.rbee.pokedexgui.model.move.Move;
 import com.rbee.pokedexgui.util.PokemonConstants;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,8 @@ public class Pokemon {
     private final String secondaryType; // optional
     private final int baseLevel;
 
-    private ArrayList < String > moveSet = new ArrayList < > ();
+    private final ObservableList<Move> moveSet = FXCollections.observableArrayList();
+
     private String heldItem;
 
 
@@ -52,11 +55,9 @@ public class Pokemon {
         this.pokemonEvolutionInfo = pokemonEvolutionInfo;
         this.heldItem = heldItem;
 
-        this.moveSet = new ArrayList < > ();
-        // Default moves:
-        addDefaultMoves();
-
+        addDefaultMoves(); // This populates the moveSet ObservableList
     }
+
 
     /**
      * Gets pokedex number.
@@ -121,14 +122,6 @@ public class Pokemon {
         return pokemonEvolutionInfo;
     }
 
-    /**
-     * Gets move set.
-     *
-     * @return the move set
-     */
-    public List < String > getMoveSet() {
-        return new ArrayList < > (moveSet);
-    }
 
     /**
      * Gets held item.
@@ -148,14 +141,11 @@ public class Pokemon {
         this.heldItem = heldItem;
     }
 
-    /**
-     * Sets move set.
-     *
-     * @param moveSet the move set
-     */
-    public void setMoveSet(ArrayList < String > moveSet) {
-        this.moveSet = moveSet;
+
+    public ObservableList<Move> getMoveSet() {
+        return moveSet;
     }
+
 
     private void addDefaultMoves() {
         MoveManager moveManager = MoveManager.getInstance();  // get your singleton instance
@@ -163,9 +153,10 @@ public class Pokemon {
         Move tackle = moveManager.getMoveByName("Tackle");
         Move defend = moveManager.getMoveByName("Defend");
 
-        if (tackle != null) moveSet.add(tackle.getName());
-        if (defend != null) moveSet.add(defend.getName());
+        if (tackle != null) moveSet.add(tackle);
+        if (defend != null) moveSet.add(defend);
     }
+
 
 
 

@@ -133,7 +133,7 @@ public class PokemonManager {
         ));
 
         addPokemon(new Pokemon(
-                384, "Rayquaza", "Dragon", "Flying",
+                384, "Kirsten", "Dragon", "Flying",
                 new Pokemon.PokemonStats(105, 150, 90, 150, 90, 95),
                 Pokemon.PokemonEvolutionInfo.NONE,
                 ""

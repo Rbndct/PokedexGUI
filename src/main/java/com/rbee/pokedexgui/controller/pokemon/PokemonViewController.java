@@ -2,9 +2,12 @@ package com.rbee.pokedexgui.controller.pokemon;
 
 import com.jfoenix.controls.*;
 import com.rbee.pokedexgui.cells.SpriteImageCell;
+import com.rbee.pokedexgui.manager.ActiveTrainerHolder;
+import com.rbee.pokedexgui.model.trainer.Trainer;
 import com.rbee.pokedexgui.util.TypeUtils;
 
 import javafx.animation.PauseTransition;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -44,6 +47,7 @@ import java.util.stream.Collectors;
 public class PokemonViewController implements Initializable {
     /* Manager */
     private PokemonManager pokemonManager;
+    private Trainer activeTrainer;
 
     /* Snackbar Containers */
     @FXML private StackPane contentStackPane;
@@ -141,10 +145,14 @@ public class PokemonViewController implements Initializable {
     @FXML private ListView<Pokemon> recentAdditionsListView;
 
 
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize manager and data structures
         this.pokemonManager = new PokemonManager();
+        activeTrainer = ActiveTrainerHolder.getActiveTrainer();
+
 
         // Initialize observable filtered list wrapping the master list
         filteredList = new FilteredList<>(pokemonManager.getPokemonList(), p -> true);
@@ -214,7 +222,12 @@ public class PokemonViewController implements Initializable {
             updateTypeDistributionChart();
         });
         setupPokemonRowClick();
+
+        setupPokemonTableContextMenu();
     }
+
+
+
 
 
     private void addPokemonNameFieldValidationListener() {
@@ -1141,4 +1154,58 @@ public class PokemonViewController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    private void setupPokemonTableContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem addToActiveTrainerItem = new MenuItem("Add to Active Trainer");
+        contextMenu.getItems().add(addToActiveTrainerItem);
+
+        addToActiveTrainerItem.setOnAction(event -> {
+            Pokemon selectedPokemon = pokemonTableView.getSelectionModel().getSelectedItem();
+            if (selectedPokemon == null) {
+                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("No Pokémon selected."), Duration.seconds(3)));
+                return;
+            }
+
+            Trainer activeTrainer = ActiveTrainerHolder.getActiveTrainer();
+            if (activeTrainer == null) {
+                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("No active trainer selected."), Duration.seconds(3)));
+                return;
+            }
+
+            // Prevent duplicate Pokémon (based on Pokédex number) in Lineup or Storage
+            boolean alreadyExists = activeTrainer.getLineup().stream()
+                    .anyMatch(p -> p.getPokedexNumber() == selectedPokemon.getPokedexNumber()) ||
+                    activeTrainer.getStorage().stream()
+                            .anyMatch(p -> p.getPokedexNumber() == selectedPokemon.getPokedexNumber());
+
+            if (alreadyExists) {
+                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(
+                        selectedPokemon.getName() + " is already owned by " + activeTrainer.getName()), Duration.seconds(3)));
+                return;
+            }
+
+            // Check if Lineup is full
+            if (activeTrainer.getLineup().size() < 6) {
+                activeTrainer.getLineup().add(selectedPokemon);
+                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(
+                        "Added " + selectedPokemon.getName() + " to " + activeTrainer.getName() + "'s lineup."), Duration.seconds(3)));
+            } else {
+                activeTrainer.getStorage().add(selectedPokemon);
+                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(
+                        activeTrainer.getName() + "'s lineup is full. " + selectedPokemon.getName() + " added to storage."), Duration.seconds(3)));
+            }
+        });
+
+        pokemonTableView.setRowFactory(tv -> {
+            TableRow<Pokemon> row = new TableRow<>();
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(contextMenu)
+            );
+            return row;
+        });
+    }
+
 }

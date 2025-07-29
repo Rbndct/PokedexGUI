@@ -88,7 +88,7 @@
          <children>
 
              <!-- Pokemon Dashboard View -->
-            <Pane fx:id="dashboardContentPane" prefHeight="420.0" prefWidth="720.0" styleClass="modern-pane">
+            <Pane fx:id="dashboardContentPane" prefHeight="420.0" prefWidth="720.0" styleClass="modern-pane" visible="false">
                <children>
 
                    <!-- Top Row Stats -->
@@ -391,7 +391,7 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <VBox fx:id="viewPokemonTab" prefHeight="420.0" prefWidth="720.0" styleClass="search-pane" stylesheets="@../../../styles/view-pokemon.css" visible="false">
+            <VBox fx:id="viewPokemonTab" prefHeight="420.0" prefWidth="720.0" styleClass="search-pane" stylesheets="@../../../styles/view-pokemon.css">
                <children>
                   <HBox alignment="CENTER" prefHeight="31.0" prefWidth="710.0" styleClass="header-box">
                      <children>
@@ -402,7 +402,7 @@
                                     <Font size="20.0" />
                                  </font>
                               </Text>
-                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="search-pane-header" text="List of every Pokémon in the data base, along with their main stats. ">
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="search-pane-header" text="Browse all discovered Pokémon across regions. Double-click a Pokémon to view detailed stats, moves, and more." textAlignment="CENTER" wrappingWidth="652.0">
                                  <font>
                                     <Font size="15.0" />
                                  </font>

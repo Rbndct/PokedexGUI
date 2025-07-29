@@ -148,9 +148,11 @@
 
 /* ImageView inside sprite cells */
 .table-cell ImageView {
+    -fx-max-width: 24px;
+    -fx-max-height: 24px;
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
     -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.4), 3, 0, 0, 1);
-    -fx-fit-width: 40px;
-    -fx-fit-height: 40px;
 }
 
 /* HBox container inside sprite cell for image + number alignment */

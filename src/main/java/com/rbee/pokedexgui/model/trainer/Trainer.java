@@ -1,41 +1,41 @@
 package com.rbee.pokedexgui.model.trainer;
 
-import java.time.LocalDate;
+import com.rbee.pokedexgui.model.item.Item;
+import com.rbee.pokedexgui.model.pokemon.Pokemon;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-/**
- * Represents a Pokémon Trainer with attributes and auto-incremented unique ID.
- */
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Trainer {
 
-    // Static counter to generate unique Trainer IDs automatically
     private static int nextId = 1;
 
-    // Attributes
-    private final int trainerId;       // Auto-incremented unique ID
+    private final int trainerId;
     private String name;
-    private LocalDate birthdate;       // Best type to work with JavaFX DatePicker
-    private Sex sex;                   // Enum for stronger type safety and UI binding ease
-    private String hometown;           // Could be linked to ComboBox options externally
+    private LocalDate birthdate;
+    private Sex sex;
+    private String hometown;
     private String description;
-    private final double money;        // Fixed initial funds (₱1,000,000.00)
 
-    /**
-     * Sex enum for strong typing and easier ComboBox binding
-     */
+    private final DoubleProperty money = new SimpleDoubleProperty(1_000_000.00);
+
+    // Pokémon slots
+    private final ObservableList<Pokemon> lineup = FXCollections.observableArrayList(); // Max 6
+    private final ObservableList<Pokemon> storage = FXCollections.observableArrayList(); // Overflow
+
+    // Items
+    private final ObservableList<Item> itemList = FXCollections.observableArrayList();
+    private final Map<Item, Integer> itemQuantities = new HashMap<>();
+
     public enum Sex {
-        MALE, FEMALE, OTHER
+        MALE, FEMALE
     }
 
-    /**
-     * Constructor for Trainer.
-     * The trainerId is auto-assigned to ensure uniqueness.
-     *
-     * @param name       Trainer's name
-     * @param birthdate  Trainer's birthdate (use LocalDate to align with DatePicker)
-     * @param sex        Trainer's sex (Enum)
-     * @param hometown   Trainer's hometown (free-text or validated from ComboBox options)
-     * @param description Trainer's description or notes
-     */
     public Trainer(String name, LocalDate birthdate, Sex sex, String hometown, String description) {
         this.trainerId = nextId++;
         this.name = name;
@@ -43,10 +43,9 @@ public class Trainer {
         this.sex = sex;
         this.hometown = hometown;
         this.description = description;
-        this.money = 1_000_000.00;  // Initial fixed funds
     }
 
-    // Getters
+    // Basic getters
 
     public int getTrainerId() {
         return trainerId;
@@ -73,8 +72,137 @@ public class Trainer {
     }
 
     public double getMoney() {
+        return money.get();
+    }
+
+    public void setMoney(double value) {
+        money.set(value);
+    }
+
+    public DoubleProperty moneyProperty() {
         return money;
     }
 
+    // Lineup and storage logic
 
+    public ObservableList<Pokemon> getLineup() {
+        return lineup;
+    }
+
+    public ObservableList<Pokemon> getStorage() {
+        return storage;
+    }
+
+    public boolean addPokemon(Pokemon pokemon) {
+        if (pokemon == null) return false;
+        if (lineup.contains(pokemon) || storage.contains(pokemon)) return false;
+
+        if (lineup.size() < 6) {
+            return lineup.add(pokemon);
+        } else {
+            return storage.add(pokemon);
+        }
+    }
+
+    public boolean removePokemon(Pokemon pokemon) {
+        if (pokemon == null) return false;
+        return lineup.remove(pokemon) || storage.remove(pokemon);
+    }
+
+    public boolean moveToStorage(Pokemon pokemon) {
+        if (pokemon == null) return false;
+        if (lineup.remove(pokemon)) {
+            // Avoid duplicates in storage
+            if (!storage.contains(pokemon)) {
+                storage.add(pokemon);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean moveToLineup(Pokemon pokemon) {
+        if (pokemon == null) return false;
+        if (storage.contains(pokemon) && lineup.size() < 6) {
+            storage.remove(pokemon);
+            lineup.add(pokemon);
+            return true;
+        }
+        return false;
+    }
+
+    // Returns number of Pokémon in the active lineup (max 6)
+    public int getLineupCount() {
+        return lineup.size();
+    }
+
+    // Returns number of Pokémon in storage (overflow)
+    public int getStorageCount() {
+        return storage.size();
+    }
+
+    // Returns total Pokémon owned (lineup + storage)
+    public int getTotalPokemonCount() {
+        return lineup.size() + storage.size();
+    }
+
+    // Items
+
+    public ObservableList<Item> getItemList() {
+        return itemList;
+    }
+
+    public int getItemQuantity(Item item) {
+        return itemQuantities.getOrDefault(item, 0);
+    }
+
+    public boolean buyItem(Item item, int quantity) {
+        if (item == null || quantity <= 0) return false;
+        double totalCost = item.getBuyingPrice() * quantity;
+        if (totalCost > getMoney()) return false;
+
+        setMoney(getMoney() - totalCost);
+        int oldQty = itemQuantities.getOrDefault(item, 0);
+        itemQuantities.put(item, oldQty + quantity);
+
+        if (!itemList.contains(item)) {
+            itemList.add(item);
+        }
+        return true;
+    }
+
+    public boolean sellItem(Item item, int quantity) {
+        if (item == null || quantity <= 0) return false;
+        int currentQty = itemQuantities.getOrDefault(item, 0);
+        if (currentQty < quantity) return false;
+
+        setMoney(getMoney() + item.getSellingPrice() * quantity);
+        int newQty = currentQty - quantity;
+
+        if (newQty > 0) {
+            itemQuantities.put(item, newQty);
+        } else {
+            itemQuantities.remove(item);
+            itemList.remove(item);
+        }
+        return true;
+    }
+
+    public void addItem(Item item) {
+        if (item != null && !itemList.contains(item)) {
+            itemList.add(item);
+            itemQuantities.putIfAbsent(item, 1);
+        }
+    }
+
+    public void removeItem(Item item) {
+        if (itemList.contains(item)) {
+            itemList.remove(item);
+            itemQuantities.remove(item);
+        }
+    }
+
+    public int getItemCount() {
+        return itemList.size();
+    }
 }

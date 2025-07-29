@@ -1,22 +1,36 @@
 package com.rbee.pokedexgui.controller.trainer;
 
 import com.jfoenix.controls.*;
+import com.rbee.pokedexgui.app.MainApp;
+import com.rbee.pokedexgui.manager.ActiveTrainerHolder;
 import com.rbee.pokedexgui.manager.TrainerManager;
-import com.rbee.pokedexgui.model.pokemon.Pokemon;
 import com.rbee.pokedexgui.model.trainer.Trainer;
 import javafx.animation.PauseTransition;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,10 +38,17 @@ import java.util.ResourceBundle;
 
 public class TrainerViewController implements Initializable {
 
+    public Button btnSetActiveTrainer;
     private TrainerManager trainerManager;
 
-
-
+    @FXML private TableView<Trainer> trainerTableView;
+    @FXML private TableColumn<Trainer, Integer> idColumn;
+    @FXML private TableColumn<Trainer, String> nameColumn;
+    @FXML private TableColumn<Trainer, String> sexColumn;
+    @FXML private TableColumn<Trainer, String> hometownColumn;
+    @FXML private TableColumn<Trainer, String> descriptionColumn;
+    @FXML private TableColumn<Trainer, String> moneyColumn;
+    @FXML private TableColumn<Trainer, Void> manageColumn;
 
     /* Snackbar Containers */
     @FXML private StackPane contentStackPane;
@@ -62,6 +83,16 @@ public class TrainerViewController implements Initializable {
 
     private FilteredList<Trainer> filteredList;
 
+    @FXML
+    private TextField searchTextField;
+
+    @FXML
+    private JFXComboBox<String> hometownFilterBox;
+
+    @FXML
+    private JFXButton resetFiltersButton;
+
+
     // Tooltips for validation feedback
     private final Tooltip trainerNameTooltip = new Tooltip();
     private final Tooltip sexComboBoxTooltip = new Tooltip();
@@ -83,15 +114,23 @@ public class TrainerViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize manager and data structures
         this.trainerManager = new TrainerManager();
+        trainerTableView.setFixedCellSize(-1);
 
         // Initialize observable filtered list wrapping the master list
         filteredList = new FilteredList<>(trainerManager.getTrainerList(), t -> true);
+        trainerTableView.setItems(filteredList);
+
+        setupTrainerTable();
+
+        // Refresh the table so it redraws with proper wrapping and row heights
+        trainerTableView.refresh();
 
         populateHometownComboBox();
         populateSexComboBox();
         restrictBirthDateRange(birthDateField);
         birthDateField.setEditable(false); // Prevent manual input
         setupTabButtons();
+        setupFilters();
 
         // Disable add button initially
         addButton.setDisable(true);
@@ -99,15 +138,15 @@ public class TrainerViewController implements Initializable {
         // Setup snackbar for user notifications
         snackbar = new JFXSnackbar(contentStackPane);
         snackbarContainer.setVisible(false);
-        
 
         addTrainerNameFieldValidationListener();
         addSexComboBoxValidationListener();
         addTrainerDescriptionValidationListener();
         addHometownComboBoxValidationListener();
         addBirthDateValidationListener();
-
+        setupActiveTrainerSelection();
     }
+
 
     private void addTrainerNameFieldValidationListener() {
         // Focus listener to mark "touched" for trainerNameField
@@ -157,23 +196,19 @@ public class TrainerViewController implements Initializable {
             return false;
         }
 
-        // TODO: Uncomment and implement duplicate check in manager when ready
-    /*
-    if (trainerManager.isTrainerNameTaken(input)) {
-        showTooltip(trainerNameField, trainerNameTooltip,
-            "This Trainer name already exists. Please choose a different name.");
-        trainerNameField.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
-        return false;
-    }
-    */
+        // Corrected uniqueness check: if name is NOT unique, show error
+        if (!trainerManager.isTrainerNameUnique(input)) {
+            showTooltip(trainerNameField, trainerNameTooltip,
+                    "This Trainer name already exists. Please choose a different name.");
+            trainerNameField.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            return false;
+        }
 
         // Valid input
         trainerNameField.setStyle("-fx-border-color: transparent;");
         trainerNameTooltip.hide();
         return true;
     }
-
-
 
     private void addSexComboBoxValidationListener() {
         // Focus listener to mark "touched"
@@ -190,7 +225,6 @@ public class TrainerViewController implements Initializable {
             validateAndUpdateForm();
         });
     }
-
     private boolean validateSexComboBox() {
         // Only validate if touched
         if (!sexComboBoxTouched) {
@@ -210,8 +244,6 @@ public class TrainerViewController implements Initializable {
         sexComboBoxTooltip.hide();
         return true;
     }
-
-
     private void addTrainerDescriptionValidationListener() {
         trainerDescription.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
             if (wasFocused && !isFocused) { // lost focus
@@ -225,7 +257,6 @@ public class TrainerViewController implements Initializable {
             validateAndUpdateForm();
         });
     }
-
     private boolean validateAndStyleTrainerDescription() {
         // Don't validate unless touched
         if (!trainerDescriptionTouched) {
@@ -259,8 +290,6 @@ public class TrainerViewController implements Initializable {
             return false;
         }
     }
-
-
 
     private void validateAndUpdateForm() {
         boolean isTrainerNameValid = validateTrainerNameField();
@@ -316,7 +345,6 @@ public class TrainerViewController implements Initializable {
                 "Mesagoza"
         );
     }
-
     private void addHometownComboBoxValidationListener() {
         // Focus listener to mark "touched"
         hometownComboBox.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
@@ -332,7 +360,6 @@ public class TrainerViewController implements Initializable {
             validateAndUpdateForm();
         });
     }
-
     private boolean validateHometownComboBox() {
         if (!hometownComboBoxTouched) {
             hometownComboBox.setStyle("-fx-border-color: transparent;");
@@ -352,7 +379,6 @@ public class TrainerViewController implements Initializable {
         return true;
     }
 
-
     public void restrictBirthDateRange(DatePicker datePicker) {
         LocalDate minDate = LocalDate.of(1996, 1, 1);
         LocalDate maxDate = LocalDate.now();
@@ -360,7 +386,6 @@ public class TrainerViewController implements Initializable {
         datePicker.setDayCellFactory(createDateLimiter(minDate, maxDate));
         datePicker.setPromptText("Select birthdate");
     }
-
     public void addBirthDateValidationListener() {
         birthDateField.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
             if (wasFocused && !isFocused) { // lost focus
@@ -374,7 +399,6 @@ public class TrainerViewController implements Initializable {
             validateAndUpdateForm();
         });
     }
-
     private boolean validateBirthDateField() {
         if (!birthDateFieldTouched) {
             birthDateField.setStyle("-fx-border-color: transparent;");
@@ -403,8 +427,6 @@ public class TrainerViewController implements Initializable {
         birthDateTooltip.hide();
         return true;
     }
-
-
     private Callback<DatePicker, DateCell> createDateLimiter(LocalDate minDate, LocalDate maxDate) {
         return (DatePicker picker) -> new DateCell() {
             @Override
@@ -417,7 +439,6 @@ public class TrainerViewController implements Initializable {
             }
         };
     }
-
     private void showTooltip(Control control, Tooltip tooltip, String message) {
         tooltip.setText(message);
         if (control.isVisible() && control.getScene() != null && control.getScene().getWindow().isShowing()) {
@@ -432,9 +453,6 @@ public class TrainerViewController implements Initializable {
             }
         }
     }
-
-
-
     private void setupTabButtons() {
         trainerTabButtons = List.of(trainerDashboardTab, addTrainerTab, viewTrainerTab);
 
@@ -472,7 +490,6 @@ public class TrainerViewController implements Initializable {
             viewTrainerContentPane.setVisible(true);
         }
     }
-
     private void hideAddTrainerTooltips() {
         trainerNameTooltip.hide();
         sexComboBoxTooltip.hide();
@@ -480,7 +497,6 @@ public class TrainerViewController implements Initializable {
         hometownComboBoxTooltip.hide();
         birthDateTooltip.hide();
     }
-
     private  void resetFormFields() {
         trainerNameField.clear();
         birthDateField.setValue(null);
@@ -491,11 +507,9 @@ public class TrainerViewController implements Initializable {
 
         hideAddTrainerTooltips();
     }
-
     public  void handleResetTrainerForm(ActionEvent actionEvent) {
         resetFormFields();
     }
-
     public void handleAddTrainer(ActionEvent actionEvent) {
         try {
             String name = trainerNameField.getText().trim();
@@ -530,4 +544,199 @@ public class TrainerViewController implements Initializable {
             snackbar.enqueue(new JFXSnackbar.SnackbarEvent(errorLayout, Duration.seconds(3)));
         }
     }
+
+    private void setupTrainerTable() {
+        // ID column: display trainerId (int)
+        idColumn.setCellValueFactory(cellData ->
+                new SimpleIntegerProperty(cellData.getValue().getTrainerId()).asObject());
+
+        // Name column: display name (String)
+        nameColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getName()));
+
+        // Sex column: display sex enum as String
+        sexColumn.setCellValueFactory(cellData -> {
+            String symbol = switch (cellData.getValue().getSex()) {
+                case MALE -> "\u2642";  // ♂
+                case FEMALE -> "\u2640"; // ♀
+            };
+            return new SimpleStringProperty(symbol);
+        });
+
+        // Hometown column: display hometown (String)
+        hometownColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getHometown()));
+
+        // Description column: display description (String) with wrapping
+        descriptionColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getDescription())
+        );
+        setupWrappingTextColumn(descriptionColumn);
+
+
+        moneyColumn.setCellValueFactory(cellData ->
+                cellData.getValue().moneyProperty().asString("₽%,.2f")
+        );
+
+        manageColumn.setText(null);  // clear text
+
+        // Set cell factory for manage column
+        manageColumn.setCellFactory(createManageButtonCellFactory());
+    }
+
+
+    private Callback<TableColumn<Trainer, Void>, TableCell<Trainer, Void>> createManageButtonCellFactory() {
+        return col -> new TableCell<Trainer, Void>() {
+            private final JFXButton manageBtn = new JFXButton();
+
+            {
+                Image wrenchImage = new Image(getClass().getResourceAsStream("/com/rbee/pokedexgui/images/wrench-icon.png"),
+                        16, 16, true, true);
+                ImageView wrenchView = new ImageView(wrenchImage);
+                manageBtn.setGraphic(wrenchView);
+                manageBtn.getStyleClass().add("icon-button");
+                manageBtn.setTooltip(new Tooltip("Manage Trainer"));
+
+                manageBtn.setOnAction(e -> {
+                    Trainer trainer = getTableView().getItems().get(getIndex());
+                    if (trainer != null) {
+                        openManageTrainer(trainer);
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : manageBtn);
+            }
+        };
+    }
+
+    private void openManageTrainer(Trainer trainer) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/rbee/pokedexgui/view/module/trainer/ManageTrainer.fxml"));
+            Parent root = loader.load();
+
+            ManageTrainerController controller = loader.getController();
+
+            // Inject any dependencies or managers you need here
+            controller.setTrainerManager(this.trainerManager);  // assuming you have this field
+            controller.setTrainer(trainer);  // pass the selected trainer
+
+            Stage stage = new Stage();
+            stage.setTitle(trainer.getName() + " - Manage Trainer");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Makes it a modal dialog
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void setupWrappingTextColumn(TableColumn<Trainer, String> column) {
+        column.setCellFactory(col -> new TableCell<Trainer, String>() {
+            private final Text text = new Text();
+
+            {
+                text.wrappingWidthProperty().bind(col.widthProperty().subtract(16));
+                text.getStyleClass().add("wrapped-text");
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    // Extract substring until first period (including the period)
+                    int periodIndex = item.indexOf('.');
+                    String displayedText = (periodIndex != -1) ? item.substring(0, periodIndex + 1) : item;
+
+                    text.setText(displayedText);
+                    setGraphic(text);
+                }
+            }
+        });
+    }
+
+
+
+    private void setupFilters() {
+        // Populate filter box with "All" + hometowns
+        hometownFilterBox.setItems(FXCollections.observableArrayList(
+                "All",
+                "Pallet Town",
+                "New Bark Town",
+                "Littleroot Town",
+                "Twinleaf Town",
+                "Nuvema Town",
+                "Vaniville Town",
+                "Iki Town",
+                "Hau'oli City",
+                "Postwick",
+                "Wedgehurst",
+                "Cabo Poco",
+                "Mesagoza"
+        ));
+        hometownFilterBox.getSelectionModel().select("All");
+
+        // Listen for changes
+        searchTextField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+        hometownFilterBox.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+
+        // Reset button
+        resetFiltersButton.setOnAction(e -> {
+            searchTextField.clear();
+            hometownFilterBox.getSelectionModel().select("All");
+        });
+    }
+    private void applyFilters() {
+        String keyword = searchTextField.getText().toLowerCase().trim();
+        String selectedHometown = hometownFilterBox.getValue();
+
+        filteredList.setPredicate(trainer -> {
+            boolean matchesSearch = keyword.isEmpty()
+                    || String.valueOf(trainer.getTrainerId()).contains(keyword)
+                    || trainer.getName().toLowerCase().contains(keyword);
+
+            boolean matchesHometown = selectedHometown == null || selectedHometown.equals("All")
+                    || trainer.getHometown().equalsIgnoreCase(selectedHometown);
+
+            return matchesSearch && matchesHometown;
+        });
+    }
+
+    private void setupActiveTrainerSelection() {
+        btnSetActiveTrainer.setDisable(true);
+
+        // Enable the button only when a trainer is selected
+        trainerTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            btnSetActiveTrainer.setDisable(newSel == null);
+        });
+
+        btnSetActiveTrainer.setOnAction(e -> {
+            Trainer selectedTrainer = trainerTableView.getSelectionModel().getSelectedItem();
+            if (selectedTrainer != null) {
+                // 1. Set the active trainer in ActiveTrainerHolder singleton
+                ActiveTrainerHolder.setActiveTrainer(selectedTrainer);
+
+                // 2. Update the main app window title to show active trainer name
+                MainApp.setActiveTrainerTitle(selectedTrainer.getName());
+
+                // 3. Show success snackbar notification
+                JFXSnackbarLayout layout = new JFXSnackbarLayout("Active trainer set: " + selectedTrainer.getName());
+                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(layout, Duration.seconds(3)));
+            } else {
+                // Show error snackbar if no trainer selected
+                JFXSnackbarLayout layout = new JFXSnackbarLayout("No trainer selected.");
+                snackbar.enqueue(new JFXSnackbar.SnackbarEvent(layout, Duration.seconds(3)));
+            }
+        });
+    }
+
+
+
+
 }

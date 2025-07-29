@@ -2,9 +2,9 @@ package com.rbee.pokedexgui.controller.pokemon;
 
 import com.jfoenix.controls.*;
 import com.rbee.pokedexgui.cells.SpriteImageCell;
-import com.rbee.pokedexgui.controller.pokemon.PokemonDetailViewController;
 import com.rbee.pokedexgui.util.TypeUtils;
 
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -410,6 +410,11 @@ public class PokemonViewController implements Initializable {
             javafx.geometry.Bounds bounds = control.localToScreen(control.getBoundsInLocal());
             if (bounds != null && !tooltip.isShowing()) {
                 tooltip.show(control, bounds.getMinX(), bounds.getMaxY());
+
+                // Hide the tooltip automatically after 3 seconds
+                PauseTransition delay = new PauseTransition(Duration.seconds(3));
+                delay.setOnFinished(event -> tooltip.hide());
+                delay.play();
             }
         }
     }
@@ -742,8 +747,10 @@ public class PokemonViewController implements Initializable {
             evolutionLevelTooltip.hide();
         }
 
-        return valid;
+        // Also validate against evolvesFrom == evolvesTo conflict
+        return valid && validateEvolvesFromToConflict();
     }
+
 
     private boolean validateEvolvesFromSpinner() {
         if (!hasEvolvesFromCheckBox.isSelected()) {
@@ -754,6 +761,7 @@ public class PokemonViewController implements Initializable {
 
         Integer input = evolvesFromSpinner.getValue();
         Integer pokemonNumber = pokemonNumberSpinner.getValue();
+        boolean valid = true;
 
         if (input == null || input.equals(pokemonNumber)) {
             evolvesFromSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
@@ -762,13 +770,46 @@ public class PokemonViewController implements Initializable {
                 var bounds = evolvesFromSpinner.localToScreen(evolvesFromSpinner.getBoundsInLocal());
                 evolvesFromTooltip.show(evolvesFromSpinner, bounds.getMinX(), bounds.getMaxY());
             }
+            valid = false;
+        } else {
+            evolvesFromSpinner.setStyle("-fx-border-color: transparent;");
+            evolvesFromTooltip.hide();
+        }
+
+        // Also validate against evolvesFrom == evolvesTo conflict
+        return valid && validateEvolvesFromToConflict();
+    }
+
+
+    private boolean validateEvolvesFromToConflict() {
+        if (!hasEvolvesFromCheckBox.isSelected() || !hasEvolvesToCheckBox.isSelected()) return true;
+
+        Integer from = evolvesFromSpinner.getValue();
+        Integer to = evolvesToSpinner.getValue();
+
+        if (from != null && from.equals(to)) {
+            String msg = "Cannot evolve from and to the same Pokémon.";
+
+            evolvesFromSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            evolvesFromTooltip.setText(msg);
+            if (evolvesFromSpinner.getScene() != null && evolvesFromSpinner.getScene().getWindow().isShowing()) {
+                var bounds = evolvesFromSpinner.localToScreen(evolvesFromSpinner.getBoundsInLocal());
+                evolvesFromTooltip.show(evolvesFromSpinner, bounds.getMinX(), bounds.getMaxY());
+            }
+
+            evolvesToSpinner.setStyle("-fx-border-color: red; -fx-border-width: 1.5;");
+            evolvesToTooltip.setText(msg);
+            if (evolvesToSpinner.getScene() != null && evolvesToSpinner.getScene().getWindow().isShowing()) {
+                var bounds = evolvesToSpinner.localToScreen(evolvesToSpinner.getBoundsInLocal());
+                evolvesToTooltip.show(evolvesToSpinner, bounds.getMinX(), bounds.getMaxY());
+            }
+
             return false;
         }
 
-        evolvesFromSpinner.setStyle("-fx-border-color: transparent;");
-        evolvesFromTooltip.hide();
         return true;
     }
+
 
     private void setActiveTab(Button activeTab) {
         // Update button styles
@@ -897,15 +938,8 @@ public class PokemonViewController implements Initializable {
         spinnerSpecialDefense.getValueFactory().setValue(PokemonConstants.DEFAULT_BASE_STAT);
         spinnerSpeed.getValueFactory().setValue(PokemonConstants.DEFAULT_BASE_STAT);
 
-        // Hide all tooltips here
-        pokemonNumberTooltip.hide();
-        pokemonNameTooltip.hide();
-        primaryTypeTooltip.hide();
-        secondaryTypeTooltip.hide();
-        evolvesFromTooltip.hide();
-        evolvesToTooltip.hide();
-        evolutionLevelTooltip.hide();
 
+        hideAddPokemonTooltips();
     }
 
     private void setupSecondaryTypeToggle() {
@@ -1107,8 +1141,4 @@ public class PokemonViewController implements Initializable {
             e.printStackTrace();
         }
     }
-
-
-
-
 }

@@ -221,16 +221,15 @@
             </children>
         </GridPane>
 
-        <!-- Quick Access Bar -->
-        <HBox alignment="CENTER" prefHeight="58.0" prefWidth="622.0" spacing="15" styleClass="quick-access-bar">
+        <!-- Dashboard Footer Access Bar -->
+        <!-- Dashboard Footer -->
+        <HBox alignment="CENTER" prefHeight="58.0" prefWidth="622.0" spacing="10" styleClass="quick-access-bar" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
             <children>
-                <Label styleClass="quick-access-btn" text="RANDOM POKÉMON" />
-                <Region styleClass="quick-divider" />
-                <Label styleClass="quick-access-btn" text="TIP / HELP" />
-                <Region styleClass="quick-divider" />
-                <Label styleClass="quick-access-btn" text="POKÉMON FACT" />
+                <Label styleClass="footer-text" text="Made by Rbee" textFill="WHITE" />
+                <Hyperlink onAction="#openGitHub" styleClass="footer-link" text="GitHub" textFill="WHITE" />
             </children>
         </HBox>
+
 
     </children>
 </VBox>

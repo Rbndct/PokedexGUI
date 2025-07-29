@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="540.0" prefWidth="960.0" stylesheets="@../../styles/main-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rbee.pokedexgui.controller.main.MainViewController">
+<BorderPane prefHeight="540.0" prefWidth="960.0" stylesheets="@../../styles/main-styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rbee.pokedexgui.controller.main.MainViewController">
 
     <!-- LEFT NAVIGATION (SIDE BAR) -->
     <left>
-        <VBox fx:id="sidebarVBox" alignment="TOP_CENTER" prefWidth="220" spacing="20" styleClass="sidebar-pane">
+        <VBox fx:id="sidebarVBox" alignment="CENTER" prefWidth="220" spacing="20" styleClass="sidebar-pane">
             <children>
 
                 <!-- Nav Button Template -->
+                <JFXButton fx:id="btnDashboard" graphicTextGap="12" styleClass="nav-card" text="Dashboard">
+                    <graphic>
+                        <AnchorPane pickOnBounds="false" prefHeight="32" prefWidth="30.0" style="-fx-padding: 0;">
+                            <children>
+                                <ImageView fitHeight="32" fitWidth="32" pickOnBounds="true" preserveRatio="true" styleClass="icon-3d-effect" translateX="-12" translateY="0">
+                                    <image>
+                                        <Image url="@../../images/dashboard-logo.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </AnchorPane>
+                    </graphic>
+                </JFXButton>
                 <JFXButton fx:id="btnPokemon" graphicTextGap="12" styleClass="nav-card" text="Pokémon">
                     <graphic>
                         <AnchorPane pickOnBounds="false" prefHeight="32" prefWidth="30.0" style="-fx-padding: 0;">
@@ -98,7 +106,7 @@
                         <Image url="@../../images/pokedex-logo.png" />
                     </image>
                 </ImageView>
-                <Label styleClass="header-title" text="My Pokédex" />
+                <Label styleClass="header-title" text="Enhanced Pokédex" />
             </children>
         </HBox>
     </top>

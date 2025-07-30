@@ -163,33 +163,31 @@ public class ManageTrainerController implements Initializable {
         this.trainer = trainer;
 
         if (trainer != null) {
-            // Set the TableView items
-            if (trainer.getLineup() != null) {
-                activePokemonTable.setItems(trainer.getLineup());
+            // Set trainer data to TableViews
+            ObservableList<Pokemon> lineup = trainer.getLineup();
+            ObservableList<Pokemon> storage = trainer.getStorage();
+            ObservableList<Item> items = trainer.getItemList();
+
+            if (lineup != null) {
+                lineup.removeListener(lineupChangeListener); // Remove first if exists
+                lineup.addListener(lineupChangeListener);
+                activePokemonTable.setItems(lineup);
             } else {
                 activePokemonTable.getItems().clear();
             }
 
-            if (trainer.getStorage() != null) {
-                storagePokemonTable.setItems(trainer.getStorage());
+            if (storage != null) {
+                storage.removeListener(storageChangeListener);
+                storage.addListener(storageChangeListener);
+                storagePokemonTable.setItems(storage);
             } else {
                 storagePokemonTable.getItems().clear();
             }
 
-            if (trainer.getItemList() != null) {
-                trainerItemTable.setItems(trainer.getItemList());
+            if (items != null) {
+                trainerItemTable.setItems(items); // ✅ bind directly ONCE
             } else {
                 trainerItemTable.getItems().clear();
-            }
-
-            // Remove old listeners before adding new ones (to avoid duplicates)
-            if (activePokemonTable.getItems() != null) {
-                activePokemonTable.getItems().removeListener(lineupChangeListener);
-                activePokemonTable.getItems().addListener(lineupChangeListener);
-            }
-            if (storagePokemonTable.getItems() != null) {
-                storagePokemonTable.getItems().removeListener(storageChangeListener);
-                storagePokemonTable.getItems().addListener(storageChangeListener);
             }
 
             updateMoneyLabels();
@@ -201,9 +199,8 @@ public class ManageTrainerController implements Initializable {
             }
 
             refreshMoveTables();
+            debugPrintTrainerPokemon(trainer);
         }
-
-        debugPrintTrainerPokemon(trainer);
     }
 
 
@@ -496,8 +493,8 @@ public class ManageTrainerController implements Initializable {
                 double sellPrice = selectedItem.getSellingPrice() * 0.5 * quantityToSell;
                 trainer.setMoney(trainer.getMoney() + sellPrice);
 
-                // Refresh the TableView's item list in case the item was removed
-                trainerItemTable.setItems(FXCollections.observableArrayList(trainer.getItemList()));
+                trainerItemTable.getItems().setAll(trainer.getItemList());
+
 
                 updateMoneyLabels();
 
@@ -599,13 +596,10 @@ public class ManageTrainerController implements Initializable {
             boolean removed = trainer.useItem(item, 1);
             System.out.println("Item removed from inventory: " + removed);
 
-            // Update the item list UI:
-            ObservableList<Item> items = trainerItemTable.getItems();
-            items.setAll(trainer.getItemList());
-            System.out.println("Trainer item list updated, item count: " + items.size());
+            // ✅ JUST refresh, don't replace the item list
+            trainerItemTable.refresh();
+            System.out.println("Trainer item list refreshed, item count: " + trainer.getItemList().size());
 
-            // IMPORTANT: do NOT replace items list with setAll
-            // Just refresh the tables to reflect changes
             activePokemonTable.refresh();
             storagePokemonTable.refresh();
 
@@ -615,9 +609,10 @@ public class ManageTrainerController implements Initializable {
         } else {
             System.out.println("Item use failed.");
             showAlert(Alert.AlertType.ERROR, "Item Use Failed",
-                    "Cannot use " + item.getName() + " on " + pokemon.getName() + ".");
+                "Cannot use " + item.getName() + " on " + pokemon.getName() + ".");
         }
     }
+
 
     private void refreshPokemonDisplay(Pokemon pokemon) {
         updatePokemonTypeLabel(pokemon);

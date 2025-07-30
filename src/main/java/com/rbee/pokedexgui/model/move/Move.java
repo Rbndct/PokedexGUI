@@ -5,7 +5,7 @@ package com.rbee.pokedexgui.model.move;
  * The type Move.
  */
 @SuppressWarnings("squid:S106")
-public class Move {
+public class  Move {
 
     private final String name;
     private final String description;

@@ -910,11 +910,11 @@ public class PokemonViewController implements Initializable {
             );
 
             Pokemon.PokemonEvolutionInfo evolution = new Pokemon.PokemonEvolutionInfo(
-                    evolvesFrom, evolvesTo, evolutionLevel
+                    evolvesFrom, evolvesTo, evolutionLevel, false
             );
 
             Pokemon pokemon = new Pokemon(
-                    pokedexNumber, name, primaryType, secondaryType, stats, evolution, ""
+                    pokedexNumber, name, primaryType, secondaryType, stats, evolution, null
             );
 
             pokemonManager.addPokemon(pokemon);
@@ -1185,16 +1185,21 @@ public class PokemonViewController implements Initializable {
                 return;
             }
 
+            // 🧬 Clone the Pokémon (deep copy)
+            Pokemon clonedPokemon = new Pokemon(selectedPokemon);
+
             // Check if Lineup is full
             if (activeTrainer.getLineup().size() < 6) {
-                activeTrainer.getLineup().add(selectedPokemon);
+                activeTrainer.getLineup().add(clonedPokemon);
                 snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(
-                        "Added " + selectedPokemon.getName() + " to " + activeTrainer.getName() + "'s lineup."), Duration.seconds(3)));
+                        "Added " + clonedPokemon.getName() + " to " + activeTrainer.getName() + "'s lineup."), Duration.seconds(3)));
             } else {
-                activeTrainer.getStorage().add(selectedPokemon);
+                activeTrainer.getStorage().add(clonedPokemon);
                 snackbar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout(
-                        activeTrainer.getName() + "'s lineup is full. " + selectedPokemon.getName() + " added to storage."), Duration.seconds(3)));
+                        activeTrainer.getName() + "'s lineup is full. " + clonedPokemon.getName() + " added to storage."), Duration.seconds(3)));
             }
+
+            // ✅ Debug print to verify cloned Pokémon stats and identity
         });
 
         pokemonTableView.setRowFactory(tv -> {
@@ -1207,5 +1212,7 @@ public class PokemonViewController implements Initializable {
             return row;
         });
     }
+
+
 
 }

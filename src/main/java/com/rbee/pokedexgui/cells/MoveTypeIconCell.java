@@ -9,6 +9,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
+/**
+ * The type Move type icon cell.
+ */
 public class MoveTypeIconCell extends TableCell<Move, String> {
 
     private final ImageView primaryTypeImageView = createTypeImageView();
@@ -21,6 +24,9 @@ public class MoveTypeIconCell extends TableCell<Move, String> {
             MoveTypeIconCell.class.getResourceAsStream("/com/rbee/pokedexgui/images/multiplepokeballs-logo.png"),
             24, 24, true, true);
 
+    /**
+     * Instantiates a new Move type icon cell.
+     */
     public MoveTypeIconCell() {
         iconBox.setAlignment(Pos.CENTER_LEFT);
         iconBox.getChildren().addAll(primaryTypeImageView, secondaryTypeImageView);

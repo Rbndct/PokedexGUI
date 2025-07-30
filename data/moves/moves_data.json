@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Tackle",
+    "description": "Tackle is one of the most common and basic moves a Pokémon learns. It deals damage with no additional effects.",
+    "classification": "TM",
+    "primaryType": "Normal",
+    "secondaryType": ""
+  },
+  {
+    "name": "Defend",
+    "description": "Raises user\u0027s defense stat temporarily.",
+    "classification": "TM",
+    "primaryType": "Normal",
+    "secondaryType": ""
+  },
+  {
+    "name": "Cut",
+    "description": "A basic HM move that can be used to cut down small trees.",
+    "classification": "HM",
+    "primaryType": "Normal",
+    "secondaryType": ""
+  },
+  {
+    "name": "Surf",
+    "description": "Ride a huge wave to strike all targets. Can cross water.",
+    "classification": "HM",
+    "primaryType": "Water",
+    "secondaryType": ""
+  },
+  {
+    "name": "Fly",
+    "description": "Soar up and strike on the next turn. Also travels between towns.",
+    "classification": "HM",
+    "primaryType": "Flying",
+    "secondaryType": ""
+  },
+  {
+    "name": "Flamethrower",
+    "description": "A powerful blast of fire.",
+    "classification": "TM",
+    "primaryType": "Fire",
+    "secondaryType": ""
+  },
+  {
+    "name": "Ice Beam",
+    "description": "Blasts a freezing beam that may freeze the target.",
+    "classification": "TM",
+    "primaryType": "Ice",
+    "secondaryType": ""
+  },
+  {
+    "name": "Thunderbolt",
+    "description": "A strong electric blast crashes down on the target.",
+    "classification": "TM",
+    "primaryType": "Electric",
+    "secondaryType": ""
+  }
+]

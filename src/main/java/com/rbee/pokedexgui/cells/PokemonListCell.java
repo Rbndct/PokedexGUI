@@ -8,6 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+/**
+ * The type Pokemon list cell.
+ */
 public class PokemonListCell extends ListCell<Pokemon> {
     private final ImageView imageView = new ImageView();
     private final Label nameLabel = new Label();
@@ -17,6 +20,9 @@ public class PokemonListCell extends ListCell<Pokemon> {
             PokemonListCell.class.getResourceAsStream("/com/rbee/pokedexgui/images/multiplepokeballs-logo.png"),
             40, 40, true, true);
 
+    /**
+     * Instantiates a new Pokemon list cell.
+     */
     public PokemonListCell() {
         imageView.setFitWidth(40);
         imageView.setFitHeight(40);

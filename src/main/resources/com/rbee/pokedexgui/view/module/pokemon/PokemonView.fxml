@@ -402,7 +402,7 @@
                                     <Font size="20.0" />
                                  </font>
                               </Text>
-                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="search-pane-header" text="Browse all discovered Pokémon across regions. Double-click a Pokémon to view detailed stats, moves, and more." textAlignment="CENTER" wrappingWidth="652.0">
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="search-pane-header" text="Double-click a Pokémon to view detailed stats, moves, and more.  Right-click a Pokémon to set it as your active trainer's lineup." textAlignment="CENTER" wrappingWidth="652.0">
                                  <font>
                                     <Font size="15.0" />
                                  </font>

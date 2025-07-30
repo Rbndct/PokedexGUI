@@ -1,0 +1,209 @@
+[
+  {
+    "buyingPrice": 10000,
+    "name": "Calcium",
+    "category": "Vitamin",
+    "description": "A nutritious drink for Pokémon.",
+    "effect": "+10 Special Attack EVs",
+    "sellingPrice": 5000,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 10000,
+    "name": "Carbos",
+    "category": "Vitamin",
+    "description": "A nutritious drink for Pokémon.",
+    "effect": "+10 Speed EVs",
+    "sellingPrice": 5000,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 10000,
+    "name": "HP Up",
+    "category": "Vitamin",
+    "description": "A nutritious drink for Pokémon.",
+    "effect": "+10 HP EVs",
+    "sellingPrice": 5000,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 10000,
+    "name": "Iron",
+    "category": "Vitamin",
+    "description": "A nutritious drink for Pokémon.",
+    "effect": "+10 Defense EVs",
+    "sellingPrice": 5000,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 10000,
+    "name": "Protein",
+    "category": "Vitamin",
+    "description": "A nutritious drink for Pokémon.",
+    "effect": "+10 Attack EVs",
+    "sellingPrice": 5000,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 10000,
+    "name": "Zinc",
+    "category": "Vitamin",
+    "description": "A nutritious drink for Pokémon.",
+    "effect": "+10 Special Defense EVs",
+    "sellingPrice": 5000,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 300,
+    "name": "Health Feather",
+    "category": "Feather",
+    "description": "Slightly increases HP.",
+    "effect": "+1 HP EV",
+    "sellingPrice": 150,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 300,
+    "name": "Muscle Feather",
+    "category": "Feather",
+    "description": "Slightly increases Attack.",
+    "effect": "+1 Attack EV",
+    "sellingPrice": 150,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 300,
+    "name": "Resist Feather",
+    "category": "Feather",
+    "description": "Slightly increases Defense.",
+    "effect": "+1 Defense EV",
+    "sellingPrice": 150,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 300,
+    "name": "Swift Feather",
+    "category": "Feather",
+    "description": "Slightly increases Speed.",
+    "effect": "+1 Speed EV",
+    "sellingPrice": 150,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 300,
+    "name": "Genius Feather",
+    "category": "Feather",
+    "description": "Slightly increases Special Attack.",
+    "effect": "+1 Special Attack EV",
+    "sellingPrice": 150,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 300,
+    "name": "Clever Feather",
+    "category": "Feather",
+    "description": "Slightly increases Special Defense.",
+    "effect": "+1 Special Defense EV",
+    "sellingPrice": 150,
+    "stock": 10
+  },
+  {
+    "buyingPrice": -1,
+    "name": "Rare Candy",
+    "category": "Leveling Item",
+    "description": "A candy packed with energy.",
+    "effect": "Increases level by 1",
+    "sellingPrice": 2400,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Fire Stone",
+    "category": "Evolution Stone",
+    "description": "Radiates heat.",
+    "effect": "Evolves Vulpix, Growlithe, Eevee, etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Water Stone",
+    "category": "Evolution Stone",
+    "description": "Blue, watery appearance.",
+    "effect": "Evolves Poliwhirl, Shellder, Eevee, etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Thunder Stone",
+    "category": "Evolution Stone",
+    "description": "Sparkles with electricity.",
+    "effect": "Evolves Pikachu, Eelektrik, Eevee, etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Leaf Stone",
+    "category": "Evolution Stone",
+    "description": "Leaf pattern.",
+    "effect": "Evolves Gloom, Weepinbell, Exeggcute etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": -1,
+    "name": "Moon Stone",
+    "category": "Evolution Stone",
+    "description": "Glows faintly.",
+    "effect": "Evolves Nidorina, Clefairy, Jigglypuff, etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Sun Stone",
+    "category": "Evolution Stone",
+    "description": "Glows like the sun.",
+    "effect": "Evolves Gloom, Sunkern, Cottonee, etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Shiny Stone",
+    "category": "Evolution Stone",
+    "description": "Sparkles brightly.",
+    "effect": "Evolves Togetic, Roselia, Minccino, etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Dusk Stone",
+    "category": "Evolution Stone",
+    "description": "Ominous appearance.",
+    "effect": "Evolves Murkrow, Misdreavus, Doublade, etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Dawn Stone",
+    "category": "Evolution Stone",
+    "description": "Sparkles like the morning sky.",
+    "effect": "Evolves male Kirlia and female Snorunt.",
+    "sellingPrice": 1500,
+    "stock": 10
+  },
+  {
+    "buyingPrice": 3000,
+    "name": "Ice Stone",
+    "category": "Evolution Stone",
+    "description": "Cold to the touch.",
+    "effect": "Evolves Alolan Vulpix, etc.",
+    "sellingPrice": 1500,
+    "stock": 10
+  }
+]

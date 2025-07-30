@@ -113,7 +113,7 @@ public class TrainerViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize manager and data structures
-        this.trainerManager = new TrainerManager();
+        this.trainerManager = TrainerManager.getInstance();
         trainerTableView.setFixedCellSize(-1);
 
         // Initialize observable filtered list wrapping the master list

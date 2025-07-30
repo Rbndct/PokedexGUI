@@ -3,7 +3,9 @@ package com.rbee.pokedexgui.controller.trainer;
 import com.rbee.pokedexgui.cells.ItemImageNameCell;
 import com.rbee.pokedexgui.cells.PokemonListCell;
 import com.rbee.pokedexgui.cells.SpriteImageCell;
+import com.rbee.pokedexgui.manager.ItemEffectManager;
 import com.rbee.pokedexgui.manager.MoveManager;
+import com.rbee.pokedexgui.manager.PokemonManager;
 import com.rbee.pokedexgui.manager.TrainerManager;
 import com.rbee.pokedexgui.model.item.Item;
 import com.rbee.pokedexgui.model.move.Move;
@@ -106,57 +108,72 @@ public class ManageTrainerController implements Initializable {
     private Trainer trainer;
     private TrainerManager trainerManager;
 
+    private final PokemonManager pokemonManager = PokemonManager.getInstance();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Setup storage Pokémon table
+        // Only setup columns, cell factories, and UI stuff independent of trainer
+
         setupStoragePokemonTableColumns();
         setupTotalColumnBoldStyle();
         setupNameColumnWithTooltip(nameColumn);
-
         storagePokemonTable.setFixedCellSize(60);
         storagePokemonTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-
-        // Set image cell factory for storage ID column (if not already in setupStoragePokemonTableColumns)
         idColumn.setCellFactory(col -> new SpriteImageCell());
-
-        // Setup item table and context menu
         setupItemTableColumns();
         setupTrainerItemTableContextMenu();
-
-        // Setup active Pokémon table
         setupActivePokemonTableColumns();
         setupActiveTotalColumnBoldStyle();
         setupNameColumnWithTooltip(colActiveName);
-
         activePokemonTable.setFixedCellSize(60);
         activePokemonTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-
-        // Set image cell factory for active Pokémon ID column
         colActivePokedexNo.setCellFactory(col -> new SpriteImageCell());
-
         setupActivePokemonTableContextMenu();
         setupStoragePokemonTableContextMenu();
         updatePokemonCounts();
-
         setupPokemonComboBox();
         setupMoveTables();
+
+        // DO NOT use 'trainer' here!
     }
+
+    private void debugPrintTrainerPokemon(Trainer trainer) {
+        if (trainer == null) {
+            System.out.println("DEBUG: Trainer is null");
+            return;
+        }
+
+        System.out.println("DEBUG: Trainer lineup Pokémon:");
+        for (Pokemon p : trainer.getLineup()) {
+            System.out.println(String.format("  %s | Instance: %d | CurrentLevel: %d | BaseLevel: %d",
+                    p.getName(), System.identityHashCode(p), p.getCurrentLevel(), p.getBaseLevel()));
+        }
+
+        System.out.println("DEBUG: Trainer storage Pokémon:");
+        for (Pokemon p : trainer.getStorage()) {
+            System.out.println(String.format("  %s | Instance: %d | CurrentLevel: %d | BaseLevel: %d",
+                    p.getName(), System.identityHashCode(p), p.getCurrentLevel(), p.getBaseLevel()));
+        }
+    }
+
+
 
     // Called by the loader to pass the Trainer to manage
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
 
         if (trainer != null) {
-            if (trainer.getStorage() != null) {
-                storagePokemonTable.setItems(trainer.getStorage());
-            } else {
-                storagePokemonTable.getItems().clear();
-            }
-
+            // Set the TableView items
             if (trainer.getLineup() != null) {
                 activePokemonTable.setItems(trainer.getLineup());
             } else {
                 activePokemonTable.getItems().clear();
+            }
+
+            if (trainer.getStorage() != null) {
+                storagePokemonTable.setItems(trainer.getStorage());
+            } else {
+                storagePokemonTable.getItems().clear();
             }
 
             if (trainer.getItemList() != null) {
@@ -166,37 +183,56 @@ public class ManageTrainerController implements Initializable {
             }
 
             // Remove old listeners before adding new ones (to avoid duplicates)
-            trainer.getLineup().removeListener(lineupChangeListener);
-            trainer.getStorage().removeListener(storageChangeListener);
-
-            // Add listeners to update counts when lineup or storage change
-            trainer.getLineup().addListener(lineupChangeListener);
-            trainer.getStorage().addListener(storageChangeListener);
+            if (activePokemonTable.getItems() != null) {
+                activePokemonTable.getItems().removeListener(lineupChangeListener);
+                activePokemonTable.getItems().addListener(lineupChangeListener);
+            }
+            if (storagePokemonTable.getItems() != null) {
+                storagePokemonTable.getItems().removeListener(storageChangeListener);
+                storagePokemonTable.getItems().addListener(storageChangeListener);
+            }
 
             updateMoneyLabels();
             updatePokemonCounts();
-
-            // Update Pokémon ComboBox items and select first Pokémon
             updatePokemonComboBoxItems();
 
             if (!pokemonComboBox.getItems().isEmpty()) {
                 pokemonComboBox.getSelectionModel().selectFirst();
             }
 
-            // --- Refresh move tables for selected Pokémon ---
             refreshMoveTables();
         }
+
+        debugPrintTrainerPokemon(trainer);
     }
 
-    // Define these listeners as fields in your controller so you can reuse and remove them safely
-    private final ListChangeListener < Pokemon > lineupChangeListener = c -> {
+
+
+
+    private final ListChangeListener<Pokemon> lineupChangeListener = change -> {
+        System.out.println("Lineup changed!");
+        while (change.next()) {
+            if (change.wasAdded()) {
+                System.out.println("Added: " + change.getAddedSubList());
+            }
+            if (change.wasRemoved()) {
+                System.out.println("Removed: " + change.getRemoved());
+            }
+            if (change.wasUpdated()) {
+                System.out.println("Updated");
+            }
+        }
+        activePokemonTable.refresh();
         updatePokemonCounts();
-        updatePokemonComboBoxItems();
     };
 
-    private final ListChangeListener < Pokemon > storageChangeListener = c -> {
-        updatePokemonCounts();
-        updatePokemonComboBoxItems();
+    private final ListChangeListener<Pokemon> storageChangeListener = change -> {
+        while (change.next()) {
+            if (change.wasAdded() || change.wasRemoved()) {
+                storagePokemonTable.refresh();
+                updatePokemonCounts();
+            }
+        }
     };
 
     // Inject the TrainerManager so you can manipulate trainers (save, update, etc.)
@@ -214,7 +250,7 @@ public class ManageTrainerController implements Initializable {
         typeColumn.setCellValueFactory(cellData -> getCombinedTypes(cellData.getValue()));
         setupTypeColumnCellFactory(typeColumn);
 
-        levelColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getBaseLevel()).asObject());
+        levelColumn.setCellValueFactory(cellData -> cellData.getValue().baseLevelProperty().asObject());
 
         // Stats columns
         hpColumn.setCellValueFactory(cellData ->
@@ -249,9 +285,7 @@ public class ManageTrainerController implements Initializable {
                 getCombinedTypes(cellData.getValue()));
         setupTypeColumnCellFactory(colActiveType);
 
-        // Level column
-        colActiveLevel.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(cellData.getValue().getBaseLevel()).asObject());
+        colActiveLevel.setCellValueFactory(cellData -> cellData.getValue().currentLevelProperty().asObject());
 
         // Stats columns
         colActiveHp.setCellValueFactory(cellData ->
@@ -270,6 +304,8 @@ public class ManageTrainerController implements Initializable {
         // Total column
         colActiveTotal.setCellValueFactory(cellData ->
                 new SimpleIntegerProperty(cellData.getValue().getPokemonStats().getTotalBaseStats()).asObject());
+
+
     }
 
     private void setupTotalColumnBoldStyle() {
@@ -546,40 +582,53 @@ public class ManageTrainerController implements Initializable {
     }
 
 
-    // Example method for applying item effect to a Pokémon
     private void applyItemToPokemon(Item item, Pokemon pokemon) {
-//        // Implement your item effect logic here
-//        // Example: healing potion, status cure, held item, etc.
-//
-//        boolean success = false;
-//        String message = "";
-//
-//        if (item.isHealingItem()) {
-//            success = pokemon.heal(item.getHealAmount());
-//            message = success ? "Healed " + pokemon.getName() : pokemon.getName() + " is already full health!";
-//        } else if (item.isHeldItem()) {
-//            if (pokemon.getHeldItem() != null) {
-//                // You could confirm replacing current held item here
-//                pokemon.setHeldItem(null); // discard current item
-//            }
-//            pokemon.setHeldItem(item);
-//            success = true;
-//            message = pokemon.getName() + " is now holding " + item.getName();
-//        } else {
-//            // other item effects...
-//            message = "Item effect applied to " + pokemon.getName();
-//            success = true;
-//        }
-//
-//        if (success) {
-//            trainer.removeItem(item, 1);
-//            refreshItemTable();
-//            refreshPokemonTables();
-//            updateMoneyLabels();
-//        }
-//
-//        showAlert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.WARNING, "Item Used", message);
+        System.out.println("Using item: " + item.getName() + " on " + pokemon.getName());
+
+        System.out.println("Trainer lineup BEFORE applying item: " + trainer.getLineup().size());
+        System.out.println("Trainer storage BEFORE applying item: " + trainer.getStorage().size());
+
+        boolean success = ItemEffectManager.getInstance().applyItemEffect(item, pokemon);
+
+        System.out.println("Trainer lineup AFTER applying item: " + trainer.getLineup().size());
+        System.out.println("Trainer storage AFTER applying item: " + trainer.getStorage().size());
+
+        if (success) {
+            System.out.println("Item effect applied successfully.");
+
+            boolean removed = trainer.useItem(item, 1);
+            System.out.println("Item removed from inventory: " + removed);
+
+            // Update the item list UI:
+            ObservableList<Item> items = trainerItemTable.getItems();
+            items.setAll(trainer.getItemList());
+            System.out.println("Trainer item list updated, item count: " + items.size());
+
+            // IMPORTANT: do NOT replace items list with setAll
+            // Just refresh the tables to reflect changes
+            activePokemonTable.refresh();
+            storagePokemonTable.refresh();
+
+            refreshPokemonDisplay(pokemon);
+
+            System.out.println("Item applied and UI updated successfully.");
+        } else {
+            System.out.println("Item use failed.");
+            showAlert(Alert.AlertType.ERROR, "Item Use Failed",
+                    "Cannot use " + item.getName() + " on " + pokemon.getName() + ".");
+        }
     }
+
+    private void refreshPokemonDisplay(Pokemon pokemon) {
+        updatePokemonTypeLabel(pokemon);
+        updateMoveCountLabel(pokemon);
+        updatePokemonImageView(pokemon);
+        updateCurrentMovesTable(pokemon);
+        updateCompatibleMovesTable(pokemon);
+
+        refreshPokemonTables();
+    }
+
 
     private void updateMoneyLabels() {
         if (trainer != null) {
@@ -1011,5 +1060,13 @@ public class ManageTrainerController implements Initializable {
             refreshMoveTables();
         });
     }
+
+    private void debugPokemonInstance(Pokemon tablePokemon, Pokemon currentPokemon) {
+        System.out.println("Table Pokémon: " + tablePokemon.getName() + " @" + System.identityHashCode(tablePokemon));
+        System.out.println("Current Pokémon: " + currentPokemon.getName() + " @" + System.identityHashCode(currentPokemon));
+        System.out.println("Same instance? " + (tablePokemon == currentPokemon));
+        System.out.println("Equals? " + tablePokemon.equals(currentPokemon));
+    }
+
 
 }

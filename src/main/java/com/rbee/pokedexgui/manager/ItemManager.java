@@ -4,7 +4,7 @@ import com.rbee.pokedexgui.model.item.Item;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.Scanner;
+import java.io.IOException;
 
 /**
  * The type Item manager.
@@ -12,11 +12,32 @@ import java.util.Scanner;
 @SuppressWarnings("squid:S106")
 public class ItemManager {
 
+    private static volatile ItemManager instance; // Thread-safe singleton
+
     private final ObservableList<Item> itemList = FXCollections.observableArrayList();
 
-    public ItemManager() {
+    // Private constructor for singleton
+    private ItemManager() {
         populateInitialItems();
     }
+
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+// Thread-safe singleton accessor
+    public static ItemManager getInstance() {
+        if (instance == null) {
+            synchronized (ItemManager.class) {
+                if (instance == null) {
+                    instance = new ItemManager();
+                }
+            }
+        }
+        return instance;
+    }
+
 
     /**
      * Populate initial items.
@@ -77,7 +98,31 @@ public class ItemManager {
                 "Evolves Alolan Vulpix, etc.", 3000, 1500, 10));
     }
 
+    /**
+     * Gets item list.
+     *
+     * @return the item list
+     */
     public ObservableList<Item> getItemList() {
         return itemList;
+    }
+
+    /**
+     * Gets item by name.
+     *
+     * @param itemName the item name
+     *
+     * @return the item by name
+     */
+    public Item getItemByName(String itemName) {
+        if (itemName == null || itemName.isEmpty()) {
+            return null;
+        }
+        for (Item item : itemList) {
+            if (itemName.equalsIgnoreCase(item.getName())) {
+                return item;
+            }
+        }
+        return null; // Not found
     }
 }

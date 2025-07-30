@@ -1,5 +1,8 @@
 package com.rbee.pokedexgui.util;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 /**
  * The type Pokemon constants.
  */
@@ -31,14 +34,20 @@ public final class PokemonConstants {
     /**
      * The constant DEFAULT_BASE_LEVEL.
      */
-    public static final int DEFAULT_BASE_LEVEL = 1;
+    public static final int DEFAULT_BASE_LEVEL = 1; //
     /**
      * The constant MAX_BASE_STAT.
      */
     public static final int MAX_BASE_STAT = 255;
 
+    /**
+     * The constant MIN_BASE_STAT.
+     */
     public static final int MIN_BASE_STAT = 1;
 
+    /**
+     * The constant DEFAULT_BASE_STAT.
+     */
     public static final int DEFAULT_BASE_STAT = 50;
 
     private PokemonConstants() {

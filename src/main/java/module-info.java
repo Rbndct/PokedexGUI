@@ -1,17 +1,21 @@
 module com.rbee.pokedexgui {
+    // JavaFX modules
     requires javafx.controls;
     requires javafx.fxml;
+
+    // Additional Java modules
     requires java.desktop;
-    requires com.jfoenix;
     requires java.net.http;
 
-    // Add JSON library
+    // External libraries
+    requires com.jfoenix;
     requires org.json;
+    requires com.google.gson;
 
-    // Export main application package (assuming your main app class is here)
+    // Export main app package
     exports com.rbee.pokedexgui.app;
 
-    // Export and open controller packages to javafx.fxml for FXML loading
+    // Controller packages for FXML
     exports com.rbee.pokedexgui.controller.loading;
     opens com.rbee.pokedexgui.controller.loading to javafx.fxml;
 
@@ -27,7 +31,24 @@ module com.rbee.pokedexgui {
     exports com.rbee.pokedexgui.controller.item;
     opens com.rbee.pokedexgui.controller.item to javafx.fxml;
 
-    // Added trainer controller package export and open for FXMLLoader
     exports com.rbee.pokedexgui.controller.trainer;
     opens com.rbee.pokedexgui.controller.trainer to javafx.fxml;
+
+    // Model packages
+    exports com.rbee.pokedexgui.model.pokemon;
+    exports com.rbee.pokedexgui.model.trainer;
+    exports com.rbee.pokedexgui.model.item;
+    exports com.rbee.pokedexgui.model.move;
+
+    // Manager and utility
+    exports com.rbee.pokedexgui.manager;
+    exports com.rbee.pokedexgui.util;
+
+    // Open model and util packages to Gson for reflection
+    opens com.rbee.pokedexgui.model.pokemon to com.google.gson;
+    opens com.rbee.pokedexgui.model.trainer to com.google.gson;
+    opens com.rbee.pokedexgui.model.item to com.google.gson;
+    opens com.rbee.pokedexgui.model.move to com.google.gson;
+    opens com.rbee.pokedexgui.util to com.google.gson;
+    opens com.rbee.pokedexgui.manager to com.google.gson;
 }

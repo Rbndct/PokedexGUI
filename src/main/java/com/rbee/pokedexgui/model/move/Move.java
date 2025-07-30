@@ -32,6 +32,20 @@ public class Move {
     }
 
     /**
+     * Instantiates a new Move.
+     *
+     * @param other the other
+     */
+    public Move(Move other) {
+        this.name = other.name;
+        this.description = other.description;
+        this.classification = other.classification; // assuming Classification is an enum or immutable
+        this.primaryType = other.primaryType;
+        this.secondaryType = other.secondaryType;
+    }
+
+
+    /**
      * Gets name.
      *
      * @return the name

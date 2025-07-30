@@ -381,7 +381,4 @@ public class PokemonDetailViewController {
             }
         }
     }
-
-
-
 }

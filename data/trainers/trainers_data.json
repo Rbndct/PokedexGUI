@@ -1,0 +1,67 @@
+[
+  {
+    "trainerId": 1,
+    "name": "Rbee",
+    "birthdate": "2025-07-02",
+    "sex": "MALE",
+    "hometown": "Pallet Town",
+    "description": "Malakas si rbee.",
+    "money": 858125.0,
+    "lineup": [
+      {
+        "pokedexNumber": 1,
+        "pokemonStats": {
+          "hp": 82,
+          "attack": 90,
+          "defense": 90,
+          "spAttack": 136,
+          "spDefense": 123,
+          "speed": 82
+        },
+        "pokemonEvolutionInfo": {
+          "evolvesFromNumber": 0,
+          "evolvesToNumber": 2,
+          "evolutionLevel": 16,
+          "evolvesByStone": false
+        },
+        "name": "Bulbasaur",
+        "primaryType": "Grass",
+        "secondaryType": "Poison",
+        "baseLevelValue": 0,
+        "currentLevelValue": 0,
+        "canEvolveByLevel": false,
+        "requiredLevel": 0,
+        "evolvedPokedexNumber": 0
+      }
+    ],
+    "storage": [
+      {
+        "pokedexNumber": 2,
+        "pokemonStats": {
+          "hp": 60,
+          "attack": 62,
+          "defense": 63,
+          "spAttack": 80,
+          "spDefense": 80,
+          "speed": 60
+        },
+        "pokemonEvolutionInfo": {
+          "evolvesFromNumber": 1,
+          "evolvesToNumber": 3,
+          "evolutionLevel": 32,
+          "evolvesByStone": false
+        },
+        "name": "Ivysaur",
+        "primaryType": "Grass",
+        "secondaryType": "Poison",
+        "baseLevelValue": 0,
+        "currentLevelValue": 0,
+        "canEvolveByLevel": false,
+        "requiredLevel": 0,
+        "evolvedPokedexNumber": 0
+      }
+    ],
+    "itemList": [],
+    "itemQuantities": {}
+  }
+]

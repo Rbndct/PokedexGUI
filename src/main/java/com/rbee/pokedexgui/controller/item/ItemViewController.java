@@ -41,7 +41,8 @@ public class ItemViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        itemManager = new ItemManager();
+        itemManager = ItemManager.getInstance();
+
         filteredList = new FilteredList<>(itemManager.getItemList(), p -> true);
 
         // Initialize snackbar with any parent container you have, e.g., itemTableView's parent or other container
@@ -105,10 +106,13 @@ public class ItemViewController implements Initializable {
             return;
         }
 
+        Trainer activeTrainer = ActiveTrainerHolder.getActiveTrainer(); // <--- THIS LINE IS CRITICAL
         if (activeTrainer == null) {
             showSnackbar("No active trainer selected.");
             return;
         }
+
+        System.out.println("Buying for trainer: " + activeTrainer.getName() + " (hashcode: " + activeTrainer.hashCode() + ")");
 
         TextInputDialog quantityDialog = new TextInputDialog("1");
         quantityDialog.setTitle("Buy Item");

@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * The type Main app.
+ */
 public class MainApp extends Application {
 
     private static Stage primaryStage;
@@ -33,13 +36,23 @@ public class MainApp extends Application {
         com.rbee.pokedexgui.manager.ContentManager.getInstance().setHostServices(getHostServices());
     }
 
-    // Method to update title dynamically
+    /**
+     * Sets active trainer title.
+     *
+     * @param trainerName the trainer name
+     */
+// Method to update title dynamically
     public static void setActiveTrainerTitle(String trainerName) {
         if (primaryStage != null) {
             primaryStage.setTitle("Enhanced Pokédex by Rbee :>  |  Active Trainer: " + trainerName);
         }
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         launch();
     }

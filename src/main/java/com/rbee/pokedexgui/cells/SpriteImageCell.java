@@ -9,6 +9,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
+/**
+ * The type Sprite image cell.
+ */
 public class SpriteImageCell extends TableCell<Pokemon, Integer> {
     private final ImageView imageView = new ImageView();
     private final Label idLabel = new Label();
@@ -18,6 +21,9 @@ public class SpriteImageCell extends TableCell<Pokemon, Integer> {
             SpriteImageCell.class.getResourceAsStream("/com/rbee/pokedexgui/images/multiplepokeballs-logo.png"),
             40, 40, true, true);
 
+    /**
+     * Instantiates a new Sprite image cell.
+     */
     public SpriteImageCell() {
         imageView.setFitWidth(40);
         imageView.setFitHeight(40);

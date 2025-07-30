@@ -119,7 +119,7 @@ public class MoveViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize move manager and filtered move list
-        this.moveManager = new MoveManager();
+        this.moveManager = MoveManager.getInstance();
         filteredMoveList = new FilteredList<>(moveManager.getMoveList(), move -> true);
 
         // Setup Classification combo box with formatted display

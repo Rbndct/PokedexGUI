@@ -593,8 +593,13 @@ public class Pokemon {
      * @return true if it can evolve by level up, false otherwise
      */
     public boolean canEvolveByLevelUp() {
-        return canEvolveByLevel && evolvedPokedexNumber > 0;
+        PokemonEvolutionInfo evoInfo = getPokemonEvolutionInfo();
+        return evoInfo != null
+            && evoInfo.getEvolutionLevel() > 0
+            && evoInfo.getEvolvesToNumber() > 0;
     }
+
+
 
     /**
      * Gets the required level for level-based evolution.
@@ -614,16 +619,27 @@ public class Pokemon {
             return;
         }
 
-        Pokemon evolvedForm = pokemonManager.getByNumber(evolvedPokedexNumber);
-        if (evolvedForm != null) {
-            copyEvolutionDataFrom(evolvedForm);
+        int evolvesToNumber = getPokemonEvolutionInfo().getEvolvesToNumber();
+        if (evolvesToNumber <= 0) {
+            System.err.println("No evolution available.");
+            return;
+        }
+
+        Pokemon evolvedFormBase = pokemonManager.getByNumber(evolvesToNumber);
+        if (evolvedFormBase != null) {
+            Pokemon evolvedForm = createEvolvedInstance(evolvedFormBase);
+
+            // Replace current Pokémon's data with evolved instance data
+            copyEvolutionDataFrom(evolvedForm); // or replace references in your trainer list if using new instance
+
             System.out.println(this.name + " has evolved by level up!");
-            // Disable further level-up evolution to prevent repeat
-            this.canEvolveByLevel = false;
+            this.canEvolveByLevel = false; // disable further level evolutions if needed
         } else {
-            System.err.println("Evolved form not found for Pokedex #" + evolvedPokedexNumber);
+            System.err.println("Evolved form not found for Pokedex #" + evolvesToNumber);
         }
     }
+
+
 
     /**
      * Helper method to copy evolution-related data from another Pokemon instance.
@@ -638,7 +654,13 @@ public class Pokemon {
         this.pokemonStats = evolvedForm.getPokemonStats();
         this.pokemonEvolutionInfo = evolvedForm.getPokemonEvolutionInfo();
         this.heldItem = evolvedForm.getHeldItem();
+
+        // Do NOT change currentLevel, currentHp, IVs, EVs, or any personal stats.
+        // Just keep them exactly as they are.
+
+        System.out.println(this.name + " has evolved, keeping current stats unchanged.");
     }
+
 
     /**
      * Represents base stats of a Pokémon.

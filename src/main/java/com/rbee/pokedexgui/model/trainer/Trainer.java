@@ -354,20 +354,39 @@ public class Trainer {
      * @return the boolean
      */
     public boolean buyItem(Item item, int quantity) {
-        System.out.println("Buying for trainer hashcode: " + this.hashCode());
         if (item == null || quantity <= 0) return false;
+
+        // Reject buying items with invalid or sentinel price (like -1)
+        if (item.getBuyingPrice() <= 0) {
+            System.out.println("Cannot buy item with non-positive buying price: " + item.getName());
+            return false;
+        }
+
+        int oldQty = itemQuantities.getOrDefault(item, 0);
+        int maxQuantity = 50; // your max per item limit
+
+        // Check if buying this quantity exceeds max allowed quantity
+        if (oldQty + quantity > maxQuantity) {
+            System.out.println("Cannot have more than " + maxQuantity + " of " + item.getName());
+            return false;
+        }
+
         double totalCost = item.getBuyingPrice() * quantity;
         if (totalCost > getMoney()) return false;
 
         setMoney(getMoney() - totalCost);
-        int oldQty = itemQuantities.getOrDefault(item, 0);
+
         itemQuantities.put(item, oldQty + quantity);
 
         if (!itemList.contains(item)) {
             itemList.add(item);
         }
+
         return true;
     }
+
+
+
 
     /**
      * Sell item boolean.
@@ -441,6 +460,20 @@ public class Trainer {
             }
         }
     }
+
+    public void addItem(Item item, int quantity) {
+        if (!itemList.contains(item)) {
+            itemList.add(item);
+            itemQuantities.put(item, quantity);
+        } else {
+            // If item already exists, increment quantity
+            int currentQty = itemQuantities.getOrDefault(item, 0);
+            itemQuantities.put(item, currentQty + quantity);
+        }
+    }
+
+
+
 
 
 

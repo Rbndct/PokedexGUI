@@ -122,10 +122,11 @@ public class ItemEffectManager {
             System.out.println(pokemon.getName() + " leveled up to " + newLevel);
 
             // Check if Pokémon can evolve by level up and if new level meets requirement
-            if (pokemon.canEvolveByLevelUp() && newLevel >= pokemon.getRequiredLevelForLevelEvolution()) {
+            if (pokemon.canEvolveByLevelUp() && newLevel >= pokemon.getPokemonEvolutionInfo().getEvolutionLevel()) {
                 pokemon.evolveByLevelUp();
                 System.out.println(pokemon.getName() + " has evolved by leveling up!");
             }
+
             return true;
         }
         System.out.println(pokemon.getName() + " is already at max level.");

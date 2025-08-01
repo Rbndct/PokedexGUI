@@ -73,7 +73,7 @@ public class ItemManager {
 
         // Other
         itemList.add(new Item("Rare Candy", "Leveling Item", "A candy packed with energy.",
-                "Increases level by 1", -1, 2400, 10));
+                "Increases level by 1", 10000, 2400, 10));
 
         // Evolution Stones
         itemList.add(new Item("Fire Stone", "Evolution Stone", "Radiates heat.",
